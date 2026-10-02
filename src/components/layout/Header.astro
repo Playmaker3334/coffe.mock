@@ -8,43 +8,43 @@ import MobileNav from "./MobileNav.astro";
 ---
 
 <header data-site-header class="sticky top-0 z-40 bg-ink text-cream shadow-[0_0.25rem_1rem_rgb(0_0_0/0.25)]">
-  <div class="mx-auto flex w-[94%] items-center justify-between gap-[3%] py-[1.2rem] xl:py-[1.5rem]">
+  <div class="mx-auto flex w-[94%] items-center justify-between gap-[3%] py-[1.2rem] lg:py-[1.08rem] xl:py-[1.35rem]">
     <Logo />
 
     <nav aria-label="Principal" class="hidden flex-1 items-center justify-center gap-[1.4%] xl:flex">
-      <Bean class="size-7 text-amber" />
+      <Bean class="size-[1.575rem] text-amber" />
       {
         site.nav.primary.map((item, i) => (
           <>
-            {i > 0 && <Bean class="size-5 text-leaf" />}
+            {i > 0 && <Bean class="size-[1.125rem] text-leaf" />}
             <a
               href={withBase(item.href)}
-              class="whitespace-nowrap font-display text-[clamp(1.6rem,2.2vw,2.7rem)] uppercase leading-none tracking-wide transition-colors hover:text-sun"
+              class="whitespace-nowrap font-display text-[clamp(1.44rem,1.98vw,2.43rem)] uppercase leading-none tracking-wide transition-colors hover:text-sun"
             >
               {item.label}
             </a>
           </>
         ))
       }
-      <Bean class="size-7 text-amber" />
+      <Bean class="size-[1.575rem] text-amber" />
     </nav>
 
     <div class="flex items-center gap-[1.2rem]">
       <a href={withBase("/cuenta")} aria-label="Cuenta" class="hidden transition-colors hover:text-sun xl:block">
-        <Icon name="user" class="size-8" />
+        <Icon name="user" class="size-[1.8rem]" />
       </a>
 
       <button type="button" aria-label="Buscar" class="hidden transition-colors hover:text-sun xl:block">
-        <Icon name="search" class="size-8" />
+        <Icon name="search" class="size-[1.8rem]" />
       </button>
 
       <a
         href={withBase("/carrito")}
         aria-label={`Carrito, ${site.cartCount} artículos`}
-        class="relative mr-[1.6rem] transition-colors hover:text-sun"
+        class="relative mr-[1.6rem] lg:mr-[1.44rem] transition-colors hover:text-sun"
       >
-        <Icon name="cart" class="size-9" />
-        <span class="absolute -right-[1.6rem] -top-[0.7rem] font-display text-[1.6rem] leading-none text-amber">
+        <Icon name="cart" class="size-9 lg:size-[2.025rem]" />
+        <span class="absolute -right-[1.6rem] -top-[0.7rem] font-display text-[1.6rem] lg:-right-[1.44rem] lg:-top-[0.63rem] lg:text-[1.44rem] leading-none text-amber">
           ({site.cartCount})
         </span>
       </a>

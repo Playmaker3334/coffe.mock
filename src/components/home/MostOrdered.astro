@@ -24,10 +24,10 @@ const price = new Intl.NumberFormat("es-MX", {
 <section class="py-[5rem] lg:py-[7rem]">
   <div class="mx-auto w-[94%]">
     <header class="text-center">
-      <p class="font-display text-[clamp(1.2rem,1.8vw,1.9rem)] uppercase leading-none tracking-wide text-chili">
+      <p class="font-display text-[clamp(1.2rem,1.8vw,1.9rem)] lg:text-[clamp(1.08rem,1.62vw,1.71rem)] uppercase leading-none tracking-wide text-chili">
         {section.data.kicker}
       </p>
-      <h2 class="mt-[0.9rem] font-display text-[clamp(3rem,6vw,6.2rem)] uppercase leading-[1.05] text-ink">
+      <h2 class="mt-[0.9rem] font-display text-[clamp(3rem,6vw,6.2rem)] lg:text-[clamp(2.7rem,5.4vw,5.58rem)] uppercase leading-[1.05] text-ink">
         {section.data.title}
       </h2>
     </header>
@@ -38,17 +38,17 @@ const price = new Intl.NumberFormat("es-MX", {
           <article class="flex flex-col items-center px-[8%] pb-[2rem] pt-[1rem] text-center">
             <div class="relative w-[80%]">
               <Illustration name={item.illustration} blobClass={blobClass[item.color]} class="w-full" />
-              <span class="absolute -right-[6%] -top-[4%] flex size-[clamp(4.2rem,5.5vw,5.6rem)] items-center justify-center rounded-full bg-sun font-display text-[clamp(1.3rem,1.7vw,1.8rem)] text-ink">
+              <span class="absolute -right-[6%] -top-[4%] flex size-[clamp(4.2rem,5.5vw,5.6rem)] lg:size-[clamp(3.78rem,4.95vw,5.04rem)] items-center justify-center rounded-full bg-sun font-display text-[clamp(1.3rem,1.7vw,1.8rem)] lg:text-[clamp(1.17rem,1.53vw,1.62rem)] text-ink">
                 {price.format(item.price)}
               </span>
             </div>
-            <p class="mt-[2rem] font-display text-[clamp(1.1rem,1.3vw,1.4rem)] uppercase leading-none tracking-wide text-chili">
+            <p class="mt-[2rem] font-display text-[clamp(1.1rem,1.3vw,1.4rem)] lg:text-[clamp(0.99rem,1.17vw,1.26rem)] uppercase leading-none tracking-wide text-chili">
               {item.category}
             </p>
-            <h3 class="mt-[0.7rem] font-display text-[clamp(2.2rem,3vw,3.2rem)] uppercase leading-[1.05] text-ink">
+            <h3 class="mt-[0.7rem] font-display text-[clamp(2.2rem,3vw,3.2rem)] lg:text-[clamp(1.98rem,2.7vw,2.88rem)] uppercase leading-[1.05] text-ink">
               {item.name}
             </h3>
-            <p class="mt-[1.2rem] font-body text-[clamp(1.05rem,1.15vw,1.25rem)] leading-relaxed text-ink">
+            <p class="mt-[1.2rem] font-body text-[clamp(1.05rem,1.15vw,1.25rem)] lg:text-[clamp(0.945rem,1.035vw,1.125rem)] leading-relaxed text-ink">
               {item.text}
             </p>
           </article>
