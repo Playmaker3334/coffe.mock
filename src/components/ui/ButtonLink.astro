@@ -5,15 +5,28 @@ import Bean from "./Bean.astro";
 interface Props {
   href: string;
   class?: string;
+  tone?: "light" | "dark";
+  external?: boolean;
 }
 
-const { href, class: className } = Astro.props;
+const { href, class: className, tone = "light", external = false } = Astro.props;
+
+const url = /^(https?:|mailto:|tel:)/.test(href) ? href : withBase(href);
+
+const toneClass = {
+  light:
+    "hover:bg-ink hover:text-sun hover:[--btn-bg:var(--color-ink)] focus-visible:bg-ink focus-visible:text-sun focus-visible:[--btn-bg:var(--color-ink)]",
+  dark: "hover:bg-cream hover:text-ink hover:[--btn-bg:var(--color-cream)] focus-visible:bg-cream focus-visible:text-ink focus-visible:[--btn-bg:var(--color-cream)]",
+} as const;
 ---
 
 <a
-  href={withBase(href)}
+  href={url}
+  target={external ? "_blank" : undefined}
+  rel={external ? "noopener noreferrer" : undefined}
   class:list={[
-    "inline-flex items-center gap-[0.6rem] bg-sun px-[1.4rem] py-[0.7rem] font-display text-[clamp(1.15rem,1.3vw,1.4rem)] lg:text-[clamp(1.035rem,1.17vw,1.26rem)] uppercase tracking-wide text-ink [--btn-bg:var(--color-sun)] hover:bg-ink hover:text-sun hover:[--btn-bg:var(--color-ink)] focus-visible:bg-ink focus-visible:text-sun focus-visible:[--btn-bg:var(--color-ink)]",
+    "inline-flex items-center gap-[0.6rem] bg-sun px-[1.4rem] py-[0.7rem] font-display text-[clamp(1.15rem,1.3vw,1.4rem)] lg:text-[clamp(1.035rem,1.17vw,1.26rem)] uppercase tracking-wide text-ink [--btn-bg:var(--color-sun)]",
+    toneClass[tone],
     className,
   ]}
 >

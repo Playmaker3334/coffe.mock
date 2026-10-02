@@ -59,6 +59,22 @@ const defs = {
     strokeWidth: 2.5,
     body: '<path d="M24 46V16l26-6v30"/><circle cx="18" cy="46" r="6"/><circle cx="44" cy="40" r="6"/>',
   },
+  instagram: {
+    viewBox: "0 0 24 24",
+    mode: "stroke",
+    strokeWidth: 2,
+    body: '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1.1" fill="currentColor" stroke="none"/>',
+  },
+  facebook: {
+    viewBox: "0 0 24 24",
+    mode: "fill",
+    body: '<path d="M13.5 22v-8h2.7l.4-3.2h-3.1V8.8c0-.9.3-1.6 1.6-1.6h1.7V4.4c-.3 0-1.3-.1-2.5-.1-2.5 0-4.1 1.5-4.1 4.2v2.3H7.4V14h2.8v8z"/>',
+  },
+  tiktok: {
+    viewBox: "0 0 24 24",
+    mode: "fill",
+    body: '<path d="M16.6 2.5c.4 2.4 1.9 4 4.4 4.2v3.4c-1.6 0-3.1-.5-4.4-1.3v6.6a6.3 6.3 0 1 1-6.3-6.3c.3 0 .6 0 .9.1v3.5a2.9 2.9 0 1 0 2 2.7V2.5z"/>',
+  },
 } satisfies Record<string, IconDef>;
 
 export type IconName = keyof typeof defs;

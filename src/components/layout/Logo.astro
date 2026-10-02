@@ -1,18 +1,37 @@
 ---
 import { site } from "../../config/site";
 import { withBase } from "../../utils/url";
+
+interface Props {
+  size?: "md" | "lg";
+}
+
+const { size = "md" } = Astro.props;
+
+const sizes = {
+  md: {
+    root: "flex",
+    name: "text-[clamp(1.9rem,3vw,3.3rem)] lg:text-[clamp(1.71rem,2.7vw,2.97rem)]",
+    tagline: "text-[clamp(0.6rem,0.85vw,0.95rem)] lg:text-[clamp(0.54rem,0.765vw,0.855rem)]",
+  },
+  lg: {
+    root: "inline-flex",
+    name: "text-[clamp(2.6rem,3.6vw,3.9rem)]",
+    tagline: "text-[clamp(0.7rem,0.85vw,0.95rem)]",
+  },
+} as const;
+
+const s = sizes[size];
 ---
 
 <a
   href={withBase("/")}
   data-home-link
-  class="flex shrink-0 flex-col items-center leading-none"
+  class:list={[s.root, "shrink-0 flex-col items-center leading-none"]}
   aria-label={`${site.name}, inicio`}
 >
-  <span class="pb-[0.22em] font-script text-[clamp(1.9rem,3vw,3.3rem)] lg:text-[clamp(1.71rem,2.7vw,2.97rem)] text-sun">{site.name}</span>
-  <span
-    class="font-body text-[clamp(0.6rem,0.85vw,0.95rem)] lg:text-[clamp(0.54rem,0.765vw,0.855rem)] font-bold uppercase tracking-[0.35em] text-cream"
-  >
+  <span class:list={["pb-[0.22em] font-script text-sun", s.name]}>{site.name}</span>
+  <span class:list={["font-body font-bold uppercase tracking-[0.35em] text-cream", s.tagline]}>
     {site.tagline}
   </span>
 </a>

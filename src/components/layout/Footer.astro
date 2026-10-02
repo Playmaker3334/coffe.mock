@@ -1,0 +1,105 @@
+---
+import { site } from "../../config/site";
+import { withBase } from "../../utils/url";
+import ButtonLink from "../ui/ButtonLink.astro";
+import Icon from "../ui/Icon.astro";
+import Skyline from "../ui/Skyline.astro";
+import Logo from "./Logo.astro";
+
+const year = new Date().getFullYear();
+
+const heading =
+  "font-display text-[clamp(1.15rem,1.3vw,1.4rem)] lg:text-[clamp(1.035rem,1.17vw,1.26rem)] uppercase leading-none tracking-wide text-sand";
+const body =
+  "font-body text-[clamp(1.02rem,1.1vw,1.2rem)] lg:text-[clamp(0.95rem,1vw,1.1rem)] leading-relaxed";
+---
+
+<footer class="mt-[3rem]">
+  <Skyline class="-mb-px block h-[clamp(7rem,14.6vw,15rem)] w-full" />
+
+  <div class="bg-ink text-cream">
+    <div class="mx-auto w-[90%] pt-[3rem] lg:pt-[3.5rem]">
+      <div class="grid grid-cols-2 gap-x-[6%] gap-y-[2.8rem] lg:grid-cols-[1.3fr_0.9fr_1fr_1.2fr] lg:gap-x-[4%]">
+        <div class="col-span-2 lg:col-span-1">
+          <Logo size="lg" />
+          <p class:list={[body, "mt-[1.2rem] max-w-[22rem]"]}>{site.footer.about}</p>
+          <ul class="mt-[1.4rem] flex gap-[1.2rem]">
+            {
+              site.social.map((item) => (
+                <li>
+                  <a
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={item.name}
+                    class="block hover:text-sun"
+                  >
+                    <Icon name={item.icon} class="size-7" />
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <nav aria-label="Pie de página">
+          <h2 class={heading}>Navegación</h2>
+          <ul class:list={[body, "mt-[1rem] flex flex-col gap-[0.5rem]"]}>
+            {
+              site.nav.primary.map((item) => (
+                <li>
+                  <a href={withBase(item.href)} class="hover:text-sun">
+                    {item.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+
+        <div>
+          <h2 class={heading}>Horario</h2>
+          <dl class:list={[body, "mt-[1rem] flex flex-col gap-[0.6rem]"]}>
+            {
+              site.hours.map((row) => (
+                <div>
+                  <dt>{row.days}</dt>
+                  <dd class="font-bold">{row.time}</dd>
+                </div>
+              ))
+            }
+          </dl>
+        </div>
+
+        <div class="col-span-2 lg:col-span-1">
+          <h2 class={heading}>Contacto</h2>
+          <address class:list={[body, "mt-[1rem] flex flex-col gap-[0.3rem] not-italic"]}>
+            {site.contact.address.map((line) => <span>{line}</span>)}
+            <a href={site.contact.phoneHref} class="w-fit hover:text-sun">{site.contact.phone}</a>
+            <a href={`mailto:${site.contact.email}`} class="w-fit hover:text-sun">{site.contact.email}</a>
+          </address>
+          <ButtonLink href={site.contact.whatsapp} tone="dark" external class="mt-[1.4rem]">
+            Escríbenos por WhatsApp
+          </ButtonLink>
+        </div>
+      </div>
+
+      <div
+        class="mt-[3rem] flex flex-col gap-[0.8rem] border-t border-sand py-[1.4rem] font-body text-[0.9rem] text-sand md:flex-row md:items-center md:justify-between"
+      >
+        <p>© {year} {site.name} {site.tagline}. Todos los derechos reservados.</p>
+        <ul class="flex flex-wrap gap-x-[1.6rem] gap-y-[0.4rem]">
+          {
+            site.footer.legal.map((item) => (
+              <li>
+                <a href={withBase(item.href)} class="hover:text-sun">
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>

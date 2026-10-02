@@ -4,6 +4,7 @@ import "@fontsource/pacifico/400.css";
 import "@fontsource/josefin-sans/400.css";
 import "@fontsource/josefin-sans/700.css";
 import "../styles/global.css";
+import Footer from "../components/layout/Footer.astro";
 import Header from "../components/layout/Header.astro";
 import { site } from "../config/site";
 import { withBase } from "../utils/url";
@@ -33,5 +34,6 @@ const pageTitle = title ? `${title} | ${site.name}` : `${site.name} | ${site.tag
     <main>
       <slot />
     </main>
+    <Footer />
   </body>
 </html>
