@@ -4,6 +4,9 @@ import { withBase } from "../../utils/url";
 import Bean from "../ui/Bean.astro";
 import Icon from "../ui/Icon.astro";
 import Logo from "./Logo.astro";
+
+const current = Astro.url.pathname.replace(/\/$/, "");
+const isActive = (href: string) => withBase(href).replace(/\/$/, "") === current;
 ---
 
 <dialog
@@ -63,7 +66,11 @@ import Logo from "./Logo.astro";
             <li>
               <a
                 href={withBase(item.href)}
-                class="flex items-center gap-[0.7rem] font-display text-[clamp(1.9rem,8vw,2.6rem)] uppercase leading-[1.15] transition-colors hover:text-sun"
+                aria-current={isActive(item.href) ? "page" : undefined}
+                class:list={[
+                  "flex items-center gap-[0.7rem] font-display text-[clamp(1.9rem,8vw,2.6rem)] uppercase leading-[1.15] transition-colors hover:text-sun",
+                  isActive(item.href) && "text-sun",
+                ]}
               >
                 <Bean class="size-5 text-leaf" />
                 {item.label}

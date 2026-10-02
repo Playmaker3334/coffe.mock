@@ -1,0 +1,26 @@
+[
+  {
+    "id": "pide-antes",
+    "order": 1,
+    "kicker": "Lorem ipsum",
+    "title": "Pide antes de llegar",
+    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.",
+    "cta": "Pide por WhatsApp",
+    "whatsapp": true,
+    "tone": "ink",
+    "illustration": "phone",
+    "illustrationColor": "henequen"
+  },
+  {
+    "id": "cafe-a-casa",
+    "order": 2,
+    "kicker": "Dolor sit amet",
+    "title": "Llévate nuestro café a casa",
+    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.",
+    "cta": "Ir a la tienda",
+    "href": "/productos",
+    "tone": "henequen",
+    "illustration": "coffeeBag",
+    "illustrationColor": "rosa"
+  }
+]

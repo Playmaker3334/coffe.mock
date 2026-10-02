@@ -1,0 +1,29 @@
+---
+import { getEntry, render } from "astro:content";
+import ButtonLink from "../ui/ButtonLink.astro";
+import Illustration from "../ui/Illustration.astro";
+
+const entry = await getEntry("secciones", "historia-adelanto");
+if (!entry) throw new Error("Falta src/content/secciones/historia-adelanto.md");
+
+const { data } = entry;
+const { Content } = await render(entry);
+---
+
+<section class="py-[4rem] lg:py-[5rem]">
+  <div class="mx-auto grid w-[90%] grid-cols-1 items-center gap-[3rem] lg:grid-cols-[1.2fr_1fr] lg:gap-[5%]">
+    <div>
+      <p class="font-display text-[clamp(1.2rem,1.8vw,1.9rem)] lg:text-[clamp(1.08rem,1.62vw,1.71rem)] uppercase leading-none tracking-wide text-chili">
+        {data.kicker}
+      </p>
+      <h2 class="mt-[0.9rem] font-display text-[clamp(3rem,6vw,6.2rem)] lg:text-[clamp(2.7rem,5.4vw,5.58rem)] uppercase leading-[1.05] text-ink">
+        {data.title}
+      </h2>
+      <div class="mt-[1.6rem] max-w-[36rem] font-body text-[clamp(1.1rem,1.4vw,1.55rem)] lg:text-[clamp(0.99rem,1.26vw,1.395rem)] leading-relaxed text-ink">
+        <Content />
+      </div>
+      {data.cta && data.href && <ButtonLink href={data.href} class="mt-[2rem]">{data.cta}</ButtonLink>}
+    </div>
+    <Illustration name="moka" blobClass="text-orange" class="mx-auto w-[60%] max-w-[22rem]" />
+  </div>
+</section>

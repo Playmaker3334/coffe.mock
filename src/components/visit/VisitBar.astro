@@ -1,0 +1,43 @@
+---
+import { site } from "../../config/site";
+import ButtonLink from "../ui/ButtonLink.astro";
+
+const { lat, lng } = site.contact.coords;
+const directions = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+const schedule = site.hours.map((row) => ({ weekdays: [...row.weekdays], time: row.time }));
+
+const label =
+  "font-display text-[clamp(1.05rem,1.2vw,1.3rem)] lg:text-[clamp(0.95rem,1.08vw,1.17rem)] uppercase leading-none tracking-wide text-caramel";
+const value = "mt-[0.4rem] font-body text-[clamp(1.05rem,1.2vw,1.3rem)] lg:text-[clamp(0.95rem,1.08vw,1.17rem)]";
+---
+
+<section aria-label="Datos de visita" class="mx-auto w-[94%]">
+  <div class="flex flex-col gap-[1.6rem] pb-[1.8rem] md:flex-row md:flex-wrap md:items-end md:gap-x-[3rem]">
+    <div>
+      <p class={label}>Dirección</p>
+      <p class={value}>{site.contact.address.join(", ")}</p>
+    </div>
+    <div>
+      <p class={label}>Hoy</p>
+      <p class={value} data-today data-schedule={JSON.stringify(schedule)} data-tz={site.timeZone}>
+        {site.hours[0].time}
+      </p>
+    </div>
+    <div class="flex flex-wrap gap-[0.8rem] md:ml-auto">
+      <ButtonLink href={directions} external>Cómo llegar</ButtonLink>
+      <ButtonLink href={site.contact.whatsapp} tone="ink" external>WhatsApp</ButtonLink>
+    </div>
+  </div>
+</section>
+
+<script>
+  const el = document.querySelector<HTMLElement>("[data-today]");
+
+  if (el?.dataset.schedule && el.dataset.tz) {
+    const schedule: { weekdays: number[]; time: string }[] = JSON.parse(el.dataset.schedule);
+    const day = new Intl.DateTimeFormat("en-US", { weekday: "short", timeZone: el.dataset.tz }).format(new Date());
+    const index = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(day);
+    const today = schedule.find((row) => row.weekdays.includes(index));
+    el.textContent = today ? today.time : "Cerrado";
+  }
+</script>

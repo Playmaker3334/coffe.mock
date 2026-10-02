@@ -1,0 +1,11 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<svg class:list={["pointer-events-none text-sun-soft", className]} viewBox="0 0 68 18" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0 0l4 3-4 3 4 3-4 3 4 3-4 3h68l-4-3 4-3-4-3 4-3-4-3 4-3z" fill="currentColor"></path>
+</svg>

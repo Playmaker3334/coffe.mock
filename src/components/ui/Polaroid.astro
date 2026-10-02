@@ -1,0 +1,31 @@
+---
+import type { ImageMetadata } from "astro";
+import { Image } from "astro:assets";
+import Tape from "./Tape.astro";
+
+interface Props {
+  image: ImageMetadata;
+  alt: string;
+  caption?: string;
+  class?: string;
+}
+
+const { image, alt, caption, class: className } = Astro.props;
+---
+
+<figure class:list={["relative rotate-[3deg]", className]}>
+  <svg class="absolute inset-0 h-full w-full" viewBox="0 0 200 200" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M6 4Q100 -2 196 5Q200 100 195 196Q100 201 4 195Q-1 100 6 4Z" class="fill-paper"></path>
+  </svg>
+  <Tape class="absolute -top-[0.8rem] left-[36%] h-[1.5rem] w-[30%] -rotate-[8deg]" />
+  <div class="relative px-[6%] pt-[6%]">
+    <Image
+      src={image}
+      alt={alt}
+      widths={[480, 720, 960]}
+      sizes="(min-width: 64rem) 32rem, 85vw"
+      class="aspect-[4/3] w-full object-cover"
+    />
+  </div>
+  {caption && <figcaption class="relative py-[1rem] text-center font-script text-[clamp(1.3rem,1.8vw,1.9rem)] text-ink">{caption}</figcaption>}
+</figure>

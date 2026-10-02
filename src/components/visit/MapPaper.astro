@@ -1,0 +1,145 @@
+---
+import { site } from "../../config/site";
+import { paperFrame } from "../../utils/paper";
+
+const { lat, lng } = site.contact.coords;
+const desktopFrame = paperFrame(1000, 500, 20, 7);
+const mobileFrame = paperFrame(500, 620, 16, 11);
+---
+
+<section aria-label="Mapa" class="mx-auto w-[94%]">
+  <div class="relative aspect-[4/5] md:aspect-[2/1] lg:aspect-[5/2]">
+    <div
+      data-map
+      data-lat={lat}
+      data-lng={lng}
+      data-name={`${site.name} ${site.tagline}`}
+      class="absolute inset-x-[2.6%] inset-y-[2.1%] bg-[#f7efd9] md:inset-x-[1.6%] md:inset-y-[3.2%]"
+    >
+    </div>
+
+    <svg class="pointer-events-none absolute inset-0 hidden h-full w-full md:block" viewBox="0 0 1000 500" preserveAspectRatio="none" aria-hidden="true">
+      <path d={desktopFrame} class="fill-caramel" fill-rule="evenodd"></path>
+    </svg>
+    <svg class="pointer-events-none absolute inset-0 h-full w-full md:hidden" viewBox="0 0 500 620" preserveAspectRatio="none" aria-hidden="true">
+      <path d={mobileFrame} class="fill-caramel" fill-rule="evenodd"></path>
+    </svg>
+  </div>
+
+  <template data-pin>
+    <svg class="block h-[3.2rem] w-[2.4rem]" viewBox="-22 -28 44 56" aria-hidden="true">
+      <g transform="rotate(28)">
+        <ellipse cx="3" cy="3" rx="13" ry="20" fill="#c92a6a"></ellipse>
+        <ellipse cx="0" cy="0" rx="13" ry="20" fill="none" stroke="#1f2229" stroke-width="2.6"></ellipse>
+        <path d="M0 -19C-6 -8 6 6 0 19" fill="none" stroke="#1f2229" stroke-width="2.4" stroke-linecap="round"></path>
+      </g>
+    </svg>
+  </template>
+</section>
+
+<script>
+  import { mapPalette } from "../../config/mapTheme";
+
+  const container = document.querySelector<HTMLElement>("[data-map]");
+  const pinTemplate = document.querySelector<HTMLTemplateElement>("template[data-pin]");
+
+  async function initMap(el: HTMLElement) {
+    const [{ Map, Marker, NavigationControl, setWorkerUrl }, { default: workerUrl }] = await Promise.all([
+      import("maplibre-gl"),
+      import("maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url"),
+      import("maplibre-gl/dist/maplibre-gl.css"),
+    ]);
+    setWorkerUrl(workerUrl);
+
+    const center: [number, number] = [Number(el.dataset.lng), Number(el.dataset.lat)];
+
+    const map = new Map({
+      container: el,
+      style: "https://tiles.openfreemap.org/styles/positron",
+      center,
+      zoom: 16,
+      minZoom: 12,
+      maxZoom: 19,
+      cooperativeGestures: true,
+      dragRotate: false,
+      pitchWithRotate: false,
+      locale: {
+        "CooperativeGesturesHandler.WindowsHelpText": "Usa Ctrl + rueda del ratón para hacer zoom",
+        "CooperativeGesturesHandler.MacHelpText": "Usa ⌘ + rueda para hacer zoom",
+        "CooperativeGesturesHandler.MobileHelpText": "Usa dos dedos para mover el mapa",
+        "NavigationControl.ZoomIn": "Acercar",
+        "NavigationControl.ZoomOut": "Alejar",
+        "Map.Title": "Mapa",
+        "Marker.Title": "Ubicación",
+      },
+    });
+
+    map.touchZoomRotate.disableRotation();
+    map.addControl(new NavigationControl({ showCompass: false }), "top-right");
+
+    map.on("style.load", () => {
+      for (const rule of mapPalette.rules) {
+        if (map.getLayer(rule.layer)) map.setPaintProperty(rule.layer, rule.property, rule.value);
+      }
+      for (const layer of map.getStyle().layers) {
+        if (layer.type === "symbol") {
+          map.setPaintProperty(layer.id, "text-color", mapPalette.label);
+          map.setPaintProperty(layer.id, "text-halo-color", mapPalette.land);
+        }
+        if (mapPalette.hidden.includes(layer.id)) {
+          map.setLayoutProperty(layer.id, "visibility", "none");
+        }
+      }
+    });
+
+    const pin = pinTemplate?.content.firstElementChild?.cloneNode(true);
+    const marker = new Marker({
+      element: pin instanceof HTMLElement || pin instanceof SVGElement ? (pin as HTMLElement) : undefined,
+      anchor: "center",
+    });
+    marker.setLngLat(center).addTo(map);
+    marker.getElement().setAttribute("aria-label", el.dataset.name ?? "Ubicación");
+  }
+
+  if (container) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          observer.disconnect();
+          initMap(container);
+        }
+      },
+      { rootMargin: "200px" },
+    );
+    observer.observe(container);
+  }
+</script>
+
+<style is:global>
+  [data-map] .maplibregl-ctrl-group {
+    border-radius: 0;
+    background: var(--color-ink);
+  }
+
+  [data-map] .maplibregl-ctrl-group:not(:empty) {
+    box-shadow: none;
+  }
+
+  [data-map] .maplibregl-ctrl-group button + button {
+    border-top-color: var(--color-caramel);
+  }
+
+  [data-map] .maplibregl-ctrl-group button .maplibregl-ctrl-icon {
+    filter: invert(1);
+  }
+
+  [data-map] .maplibregl-ctrl-attrib {
+    background: color-mix(in srgb, var(--color-cream) 85%, transparent);
+    font-family: var(--font-body);
+  }
+
+  [data-map] .maplibregl-cooperative-gesture-screen {
+    background: color-mix(in srgb, var(--color-ink) 75%, transparent);
+    font-family: var(--font-body);
+  }
+</style>

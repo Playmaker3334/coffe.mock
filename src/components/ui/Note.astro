@@ -1,0 +1,51 @@
+---
+import Illustration from "./Illustration.astro";
+import type { IllustrationName } from "./illustrations";
+import Tape from "./Tape.astro";
+
+interface Props {
+  tone: "ink" | "henequen";
+  tilt: "left" | "right";
+  illustration: IllustrationName;
+  illustrationColor: "henequen" | "rosa" | "orange";
+}
+
+const { tone, tilt, illustration, illustrationColor } = Astro.props;
+
+const toneClass = {
+  ink: { fill: "text-ink", outline: "text-sand", lines: "text-cream" },
+  henequen: { fill: "text-henequen", outline: "text-ink", lines: "text-ink" },
+} as const;
+
+const blobClass = {
+  henequen: "text-henequen",
+  rosa: "text-rosa",
+  orange: "text-orange",
+} as const;
+
+const left = tilt === "left";
+const fill = left
+  ? "M8 10Q150 0 290 8Q298 115 292 222Q150 230 6 224Q-2 115 8 10Z"
+  : "M6 8Q150 -2 292 10Q298 115 290 224Q150 230 8 222Q0 115 6 8Z";
+const outline = left
+  ? "M14 4Q156 -6 296 2Q304 109 298 216Q156 224 12 218Q4 109 14 4Z"
+  : "M0 2Q144 -8 286 4Q292 109 284 218Q144 224 2 216Q-6 109 0 2Z";
+const t = toneClass[tone];
+---
+
+<article class:list={["relative text-cream", left ? "-rotate-[1.6deg]" : "rotate-[1.4deg]"]}>
+  <svg class="absolute inset-0 h-full w-full overflow-visible" viewBox="0 0 300 230" preserveAspectRatio="none" aria-hidden="true">
+    <path d={fill} fill="currentColor" class={t.fill}></path>
+    <path d={outline} fill="none" stroke="currentColor" stroke-width="2" vector-effect="non-scaling-stroke" class={t.outline}></path>
+  </svg>
+
+  <Tape class:list={["absolute -top-[0.6rem] h-[1.3rem] w-[24%]", left ? "left-[5%] -rotate-[9deg]" : "right-[26%] rotate-[7deg]"]} />
+
+  <div class="pointer-events-none absolute right-0 -top-[18%] w-[24%] max-w-[9rem] lg:-right-[3%] rotate-[10deg] lg:w-[20%]">
+    <Illustration name={illustration} blobClass={blobClass[illustrationColor]} lineClass={t.lines} class="w-full" />
+  </div>
+
+  <div class="relative px-[9%] pb-[2.8rem] pt-[3rem] lg:pr-[22%]">
+    <slot />
+  </div>
+</article>

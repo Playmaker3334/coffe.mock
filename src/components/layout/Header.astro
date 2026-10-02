@@ -5,6 +5,9 @@ import Bean from "../ui/Bean.astro";
 import Icon from "../ui/Icon.astro";
 import Logo from "./Logo.astro";
 import MobileNav from "./MobileNav.astro";
+
+const current = Astro.url.pathname.replace(/\/$/, "");
+const isActive = (href: string) => withBase(href).replace(/\/$/, "") === current;
 ---
 
 <header data-site-header class="sticky top-0 z-40 bg-ink text-cream">
@@ -19,7 +22,11 @@ import MobileNav from "./MobileNav.astro";
             {i > 0 && <Bean class="size-[1.125rem] text-leaf" />}
             <a
               href={withBase(item.href)}
-              class="whitespace-nowrap font-display text-[clamp(1.44rem,1.98vw,2.43rem)] uppercase leading-none tracking-wide transition-colors hover:text-sun"
+              aria-current={isActive(item.href) ? "page" : undefined}
+              class:list={[
+                "whitespace-nowrap font-display text-[clamp(1.44rem,1.98vw,2.43rem)] uppercase leading-none tracking-wide transition-colors hover:text-sun",
+                isActive(item.href) && "text-sun",
+              ]}
             >
               {item.label}
             </a>

@@ -31,6 +31,22 @@ const masPedido = defineCollection({
   }),
 });
 
+const notas = defineCollection({
+  loader: file("src/content/notas.json"),
+  schema: z.object({
+    order: z.number(),
+    kicker: z.string(),
+    title: z.string(),
+    text: z.string(),
+    cta: z.string(),
+    href: z.string().optional(),
+    whatsapp: z.boolean().default(false),
+    tone: z.enum(["ink", "henequen"]),
+    illustration: z.enum(illustrationNames),
+    illustrationColor: z.enum(["henequen", "rosa", "orange"]),
+  }),
+});
+
 const secciones = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/secciones" }),
   schema: ({ image }) =>
@@ -39,9 +55,10 @@ const secciones = defineCollection({
       title: z.string(),
       image: image().optional(),
       alt: z.string().optional(),
+      caption: z.string().optional(),
       cta: z.string().optional(),
       href: z.string().optional(),
     }),
 });
 
-export const collections = { destacados, masPedido, secciones };
+export const collections = { destacados, masPedido, notas, secciones };

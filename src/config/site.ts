@@ -4,6 +4,7 @@ export const site = {
   lang: "es-MX",
   description: "Café de especialidad tostado en Mérida, Yucatán.",
   cartCount: 0,
+  timeZone: "America/Merida",
   hero: {
     alt: "Fachada de la cafetería con terraza al frente",
   },
@@ -13,11 +14,12 @@ export const site = {
     phoneHref: "tel:+529990000000",
     email: "hola@ejemplo.mx",
     whatsapp: "https://wa.me/520000000000",
+    coords: { lat: 20.969, lng: -89.6229 },
   },
   hours: [
-    { days: "Lunes a viernes", time: "7:00 – 21:00" },
-    { days: "Sábado", time: "8:00 – 22:00" },
-    { days: "Domingo", time: "8:00 – 14:00" },
+    { days: "Lunes a viernes", time: "7:00 – 21:00", weekdays: [1, 2, 3, 4, 5] },
+    { days: "Sábado", time: "8:00 – 22:00", weekdays: [6] },
+    { days: "Domingo", time: "8:00 – 14:00", weekdays: [0] },
   ],
   social: [
     { name: "Instagram", href: "https://www.instagram.com/", icon: "instagram" },
@@ -34,7 +36,7 @@ export const site = {
   nav: {
     primary: [
       { label: "Tienda en línea", href: "/productos" },
-      { label: "Dónde encontrarnos", href: "/sucursales" },
+      { label: "Dónde encontrarnos", href: "/donde-encontrarnos" },
       { label: "Menú", href: "/menu" },
       { label: "Nosotros", href: "/nosotros" },
     ],
