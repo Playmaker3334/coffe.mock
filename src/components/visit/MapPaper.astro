@@ -9,13 +9,8 @@ const mobileFrame = paperFrame(500, 620, 16, 11);
 
 <section aria-label="Mapa" class="mx-auto w-[94%]">
   <div class="relative aspect-[4/5] md:aspect-[2/1] lg:aspect-[5/2]">
-    <div
-      data-map
-      data-lat={lat}
-      data-lng={lng}
-      data-name={`${site.name} ${site.tagline}`}
-      class="absolute inset-x-[2.6%] inset-y-[2.1%] bg-[#f7efd9] md:inset-x-[1.6%] md:inset-y-[3.2%]"
-    >
+    <div class="absolute inset-x-[2.6%] inset-y-[2.1%] bg-[#f7efd9] md:inset-x-[1.6%] md:inset-y-[3.2%]">
+      <div data-map data-lat={lat} data-lng={lng} data-name={`${site.name} ${site.tagline}`} class="h-full w-full"></div>
     </div>
 
     <svg class="pointer-events-none absolute inset-0 hidden h-full w-full md:block" viewBox="0 0 1000 500" preserveAspectRatio="none" aria-hidden="true">
