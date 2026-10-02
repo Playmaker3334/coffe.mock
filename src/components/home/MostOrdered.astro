@@ -1,0 +1,67 @@
+---
+import { getCollection, getEntry } from "astro:content";
+import ButtonLink from "../ui/ButtonLink.astro";
+import Illustration from "../ui/Illustration.astro";
+
+const section = await getEntry("secciones", "lo-mas-pedido");
+if (!section) throw new Error("Falta src/content/secciones/lo-mas-pedido.md");
+
+const items = (await getCollection("masPedido")).sort((a, b) => a.data.order - b.data.order);
+
+const blobClass = {
+  sun: "text-sun",
+  rosa: "text-rosa",
+  henequen: "text-henequen",
+} as const;
+
+const price = new Intl.NumberFormat("es-MX", {
+  style: "currency",
+  currency: "MXN",
+  maximumFractionDigits: 0,
+});
+---
+
+<section class="py-[5rem] lg:py-[7rem]">
+  <div class="mx-auto w-[94%]">
+    <header class="text-center">
+      <p class="font-display text-[clamp(1.2rem,1.8vw,1.9rem)] uppercase leading-none tracking-wide text-chili">
+        {section.data.kicker}
+      </p>
+      <h2 class="mt-[0.9rem] font-display text-[clamp(3rem,6vw,6.2rem)] uppercase leading-[1.05] text-ink">
+        {section.data.title}
+      </h2>
+    </header>
+
+    <div class="mt-[3.5rem] grid grid-cols-1 gap-[1.5rem] md:grid-cols-3">
+      {
+        items.map(({ data: item }) => (
+          <article class="flex flex-col items-center px-[8%] pb-[2rem] pt-[1rem] text-center">
+            <div class="relative w-[80%]">
+              <Illustration name={item.illustration} blobClass={blobClass[item.color]} class="w-full" />
+              <span class="absolute -right-[6%] -top-[4%] flex size-[clamp(4.2rem,5.5vw,5.6rem)] items-center justify-center rounded-full bg-sun font-display text-[clamp(1.3rem,1.7vw,1.8rem)] text-ink">
+                {price.format(item.price)}
+              </span>
+            </div>
+            <p class="mt-[2rem] font-display text-[clamp(1.1rem,1.3vw,1.4rem)] uppercase leading-none tracking-wide text-chili">
+              {item.category}
+            </p>
+            <h3 class="mt-[0.7rem] font-display text-[clamp(2.2rem,3vw,3.2rem)] uppercase leading-[1.05] text-ink">
+              {item.name}
+            </h3>
+            <p class="mt-[1.2rem] font-body text-[clamp(1.05rem,1.15vw,1.25rem)] leading-relaxed text-ink">
+              {item.text}
+            </p>
+          </article>
+        ))
+      }
+    </div>
+
+    {
+      section.data.cta && section.data.href && (
+        <div class="mt-[3.5rem] flex justify-center">
+          <ButtonLink href={section.data.href}>{section.data.cta}</ButtonLink>
+        </div>
+      )
+    }
+  </div>
+</section>

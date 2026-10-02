@@ -1,0 +1,32 @@
+[
+  {
+    "id": "latte",
+    "order": 1,
+    "category": "Bebida",
+    "name": "Latte de la casa",
+    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.",
+    "price": 65,
+    "illustration": "latte",
+    "color": "sun"
+  },
+  {
+    "id": "pan-dulce",
+    "order": 2,
+    "category": "Panadería",
+    "name": "Pan dulce",
+    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.",
+    "price": 35,
+    "illustration": "panDulce",
+    "color": "rosa"
+  },
+  {
+    "id": "pay",
+    "order": 3,
+    "category": "Postre",
+    "name": "Pay de queso",
+    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.",
+    "price": 70,
+    "illustration": "pay",
+    "color": "henequen"
+  }
+]

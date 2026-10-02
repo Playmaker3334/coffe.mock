@@ -6,6 +6,8 @@ const entry = await getEntry("secciones", "por-que-elegirnos");
 if (!entry) throw new Error("Falta src/content/secciones/por-que-elegirnos.md");
 
 const { data } = entry;
+const { image, alt } = data;
+if (!image || !alt) throw new Error("por-que-elegirnos.md necesita image y alt");
 const { Content } = await render(entry);
 ---
 
@@ -28,8 +30,8 @@ const { Content } = await render(entry);
       </svg>
       <div class="absolute inset-0 translate-x-[4%] translate-y-[3%] rounded-full bg-sun" aria-hidden="true"></div>
       <Image
-        src={data.image}
-        alt={data.alt}
+        src={image}
+        alt={alt}
         widths={[400, 640, 960, 1280]}
         sizes="(min-width: 64rem) 24rem, 58vw"
         class="relative aspect-square w-full rounded-full object-cover"

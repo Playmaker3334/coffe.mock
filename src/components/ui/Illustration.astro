@@ -1,0 +1,19 @@
+---
+import { illustrations, type IllustrationName } from "./illustrations";
+
+interface Props {
+  name: IllustrationName;
+  blobClass: string;
+  class?: string;
+}
+
+const { name, blobClass, class: className } = Astro.props;
+const { blob, lines } = illustrations[name];
+---
+
+<svg class={className} viewBox="-82 -72 164 140" aria-hidden="true">
+  <path d={blob} fill="currentColor" class={blobClass}></path>
+  <g fill="none" class="stroke-ink" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    {lines.map((d) => <path d={d} />)}
+  </g>
+</svg>

@@ -1,7 +1,6 @@
 ---
 import { getCollection } from "astro:content";
-import { withBase } from "../../utils/url";
-import Bean from "../ui/Bean.astro";
+import ButtonLink from "../ui/ButtonLink.astro";
 import Icon from "../ui/Icon.astro";
 
 const cards = (await getCollection("destacados")).sort((a, b) => a.data.order - b.data.order);
@@ -39,14 +38,7 @@ const colorClass = {
             {card.text}
           </p>
 
-          <a
-            href={withBase(card.href)}
-            class="mt-auto inline-flex items-center gap-[0.6rem] bg-sun px-[1.4rem] py-[0.7rem] font-display text-[clamp(1.15rem,1.3vw,1.4rem)] uppercase tracking-wide text-ink [--btn-bg:var(--color-sun)] hover:bg-ink hover:text-sun hover:[--btn-bg:var(--color-ink)] focus-visible:bg-ink focus-visible:text-sun focus-visible:[--btn-bg:var(--color-ink)]"
-          >
-            <Bean class="size-4" crease="var(--btn-bg)" />
-            {card.cta}
-            <Bean class="size-4" crease="var(--btn-bg)" />
-          </a>
+          <ButtonLink href={card.href} class="mt-auto">{card.cta}</ButtonLink>
         </article>
       ))
     }

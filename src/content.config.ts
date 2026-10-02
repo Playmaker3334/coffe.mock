@@ -2,6 +2,7 @@ import { defineCollection } from "astro:content";
 import { file, glob } from "astro/loaders";
 import { z } from "astro/zod";
 import { iconNames } from "./components/ui/icons";
+import { illustrationNames } from "./components/ui/illustrations";
 
 const destacados = defineCollection({
   loader: file("src/content/destacados.json"),
@@ -17,15 +18,30 @@ const destacados = defineCollection({
   }),
 });
 
+const masPedido = defineCollection({
+  loader: file("src/content/mas-pedido.json"),
+  schema: z.object({
+    order: z.number(),
+    category: z.string(),
+    name: z.string(),
+    text: z.string(),
+    price: z.number(),
+    illustration: z.enum(illustrationNames),
+    color: z.enum(["sun", "rosa", "henequen"]),
+  }),
+});
+
 const secciones = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/secciones" }),
   schema: ({ image }) =>
     z.object({
       kicker: z.string(),
       title: z.string(),
-      image: image(),
-      alt: z.string(),
+      image: image().optional(),
+      alt: z.string().optional(),
+      cta: z.string().optional(),
+      href: z.string().optional(),
     }),
 });
 
-export const collections = { destacados, secciones };
+export const collections = { destacados, masPedido, secciones };
