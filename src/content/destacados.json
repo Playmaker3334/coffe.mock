@@ -1,0 +1,46 @@
+[
+  {
+    "id": "cafe",
+    "order": 1,
+    "kicker": "Lorem ipsum",
+    "title": "Café de origen",
+    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    "cta": "Lorem ipsum",
+    "href": "/menu",
+    "color": "roast",
+    "icon": "cup"
+  },
+  {
+    "id": "cocina",
+    "order": 2,
+    "kicker": "Dolor sit amet",
+    "title": "Cocina de casa",
+    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    "cta": "Lorem ipsum",
+    "href": "/menu",
+    "color": "henequen",
+    "icon": "plate"
+  },
+  {
+    "id": "postres",
+    "order": 3,
+    "kicker": "Consectetur",
+    "title": "Pan y postres",
+    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    "cta": "Lorem ipsum",
+    "href": "/menu",
+    "color": "rosa",
+    "icon": "cake"
+  },
+  {
+    "id": "eventos",
+    "order": 4,
+    "kicker": "Adipiscing elit",
+    "title": "Música y eventos",
+    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    "cta": "Lorem ipsum",
+    "href": "/nosotros",
+    "color": "orange",
+    "icon": "music"
+  }
+]

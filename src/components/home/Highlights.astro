@@ -1,17 +1,27 @@
 ---
-import { site } from "../../config/site";
+import { getCollection } from "astro:content";
 import { withBase } from "../../utils/url";
 import Bean from "../ui/Bean.astro";
+import Icon from "../ui/Icon.astro";
+
+const cards = (await getCollection("destacados")).sort((a, b) => a.data.order - b.data.order);
+
+const colorClass = {
+  roast: "bg-roast",
+  henequen: "bg-henequen",
+  rosa: "bg-rosa",
+  orange: "bg-orange",
+} as const;
 ---
 
-<section class="relative z-10 -mt-[14vh] pb-[4rem] xl:-mt-[26vh]">
+<section class="relative z-10 -mt-[14vh] pb-[5rem] xl:-mt-[26vh]">
   <div class="mx-auto grid w-[94%] grid-cols-1 gap-[1.5rem] sm:grid-cols-2 xl:grid-cols-4">
     {
-      site.highlights.map((card) => (
+      cards.map(({ data: card }) => (
         <article
           class:list={[
-            "flex flex-col items-center border-[0.6rem] border-cream px-[8%] pb-[3.2rem] pt-[3rem] text-center text-cream",
-            card.color,
+            "flex flex-col items-center border-[0.6rem] border-cream px-[8%] pb-[5.4rem] pt-[5.2rem] text-center text-cream",
+            colorClass[card.color],
           ]}
         >
           <p class="font-display text-[clamp(1.1rem,1.3vw,1.4rem)] uppercase leading-none tracking-wide">
@@ -21,68 +31,21 @@ import Bean from "../ui/Bean.astro";
             {card.title}
           </h2>
 
-          <div class="my-[2.6rem] flex aspect-square w-[62%] items-center justify-center rounded-[1rem] bg-black/20">
-            <svg
-              class="w-[55%]"
-              viewBox="0 0 64 64"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
-              {
-                card.icon === "cup" && (
-                  <>
-                    <path d="M12 26h32v14a12 12 0 0 1-12 12h-8a12 12 0 0 1-12-12z" />
-                    <path d="M44 30h4a6 6 0 0 1 0 12h-4" />
-                    <path d="M22 10c-2 3 2 5 0 8M30 10c-2 3 2 5 0 8M38 10c-2 3 2 5 0 8" />
-                  </>
-                )
-              }
-              {
-                card.icon === "plate" && (
-                  <>
-                    <circle cx="38" cy="34" r="16" />
-                    <circle cx="38" cy="34" r="9" />
-                    <path d="M10 12v12a4 4 0 0 0 8 0V12M14 12v40" />
-                  </>
-                )
-              }
-              {
-                card.icon === "cake" && (
-                  <>
-                    <path d="M12 52h40V34a4 4 0 0 0-4-4H16a4 4 0 0 0-4 4z" />
-                    <path d="M12 41c4 3 8 3 10 0s8-3 10 0 8 3 10 0 8-3 10 0" />
-                    <path d="M32 30v-8" />
-                    <path d="M32 12c-2.5 2.5-2.5 6 0 7.5 2.5-1.5 2.5-5 0-7.5z" />
-                  </>
-                )
-              }
-              {
-                card.icon === "music" && (
-                  <>
-                    <path d="M24 46V16l26-6v30" />
-                    <circle cx="18" cy="46" r="6" />
-                    <circle cx="44" cy="40" r="6" />
-                  </>
-                )
-              }
-            </svg>
+          <div class="my-[4.2rem] flex aspect-square w-[62%] items-center justify-center rounded-[1rem] bg-black/20">
+            <Icon name={card.icon} class="w-[55%]" />
           </div>
 
-          <p class="mb-[2.8rem] font-body text-[clamp(1.05rem,1.15vw,1.25rem)] leading-relaxed">
+          <p class="mb-[4.4rem] font-body text-[clamp(1.05rem,1.15vw,1.25rem)] leading-relaxed">
             {card.text}
           </p>
 
           <a
             href={withBase(card.href)}
-            class="mt-auto inline-flex items-center gap-[0.6rem] bg-sun px-[1.4rem] py-[0.7rem] font-display text-[clamp(1.15rem,1.3vw,1.4rem)] uppercase tracking-wide text-ink"
+            class="mt-auto inline-flex items-center gap-[0.6rem] bg-sun px-[1.4rem] py-[0.7rem] font-display text-[clamp(1.15rem,1.3vw,1.4rem)] uppercase tracking-wide text-ink [--btn-bg:var(--color-sun)] hover:bg-ink hover:text-sun hover:[--btn-bg:var(--color-ink)] focus-visible:bg-ink focus-visible:text-sun focus-visible:[--btn-bg:var(--color-ink)]"
           >
-            <Bean class="size-4 text-ink" crease="var(--color-sun)" />
+            <Bean class="size-4" crease="var(--btn-bg)" />
             {card.cta}
-            <Bean class="size-4 text-ink" crease="var(--color-sun)" />
+            <Bean class="size-4" crease="var(--btn-bg)" />
           </a>
         </article>
       ))

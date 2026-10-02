@@ -1,4 +1,8 @@
 ---
+import "@fontsource/anton/400.css";
+import "@fontsource/pacifico/400.css";
+import "@fontsource/josefin-sans/400.css";
+import "@fontsource/josefin-sans/700.css";
 import "../styles/global.css";
 import Header from "../components/layout/Header.astro";
 import { site } from "../config/site";
@@ -23,12 +27,6 @@ const pageTitle = title ? `${title} | ${site.name}` : `${site.name} | ${site.tag
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href={withBase("/favicon.svg")} />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Anton&family=Josefin+Sans:wght@400;600;700&family=Pacifico&display=swap"
-    />
   </head>
   <body class="min-h-dvh bg-cream font-body text-ink">
     <Header />
