@@ -1,0 +1,98 @@
+---
+import { site } from "../../config/site";
+import { withBase } from "../../utils/url";
+import Bean from "../ui/Bean.astro";
+import Logo from "./Logo.astro";
+import MobileNav from "./MobileNav.astro";
+---
+
+<header data-site-header class="sticky top-0 z-40 bg-ink text-cream shadow-[0_0.25rem_1rem_rgb(0_0_0/0.25)]">
+  <div class="mx-auto flex w-[94%] items-center justify-between gap-[3%] py-[1.2rem] xl:py-[1.5rem]">
+    <Logo />
+
+    <nav aria-label="Principal" class="hidden flex-1 items-center justify-center gap-[1.4%] xl:flex">
+      <Bean class="size-7 text-amber" />
+      {
+        site.nav.primary.map((item, i) => (
+          <>
+            {i > 0 && <Bean class="size-5 text-leaf" />}
+            <a
+              href={withBase(item.href)}
+              class="whitespace-nowrap font-display text-[clamp(1.6rem,2.2vw,2.7rem)] uppercase leading-none tracking-wide transition-colors hover:text-sun"
+            >
+              {item.label}
+            </a>
+          </>
+        ))
+      }
+      <Bean class="size-7 text-amber" />
+    </nav>
+
+    <div class="flex items-center gap-[1.2rem]">
+      <a href={withBase("/cuenta")} aria-label="Cuenta" class="hidden transition-colors hover:text-sun xl:block">
+        <svg class="size-8" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <circle cx="12" cy="7" r="4.5"></circle>
+          <path d="M3 22c0-5 4-8.5 9-8.5s9 3.5 9 8.5z"></path>
+        </svg>
+      </a>
+
+      <button type="button" aria-label="Buscar" class="hidden transition-colors hover:text-sun xl:block">
+        <svg class="size-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true">
+          <circle cx="10.5" cy="10.5" r="7"></circle>
+          <path d="M16 16l6 6"></path>
+        </svg>
+      </button>
+
+      <a
+        href={withBase("/carrito")}
+        aria-label={`Carrito, ${site.cartCount} artículos`}
+        class="relative mr-[1.6rem] transition-colors hover:text-sun"
+      >
+        <svg class="size-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M1.5 3h3l2.7 12h12l2.3-8.5H6"></path>
+          <circle cx="9.5" cy="20" r="1.6" fill="currentColor"></circle>
+          <circle cx="18" cy="20" r="1.6" fill="currentColor"></circle>
+        </svg>
+        <span class="absolute -right-[1.6rem] -top-[0.7rem] font-display text-[1.6rem] leading-none text-amber">
+          ({site.cartCount})
+        </span>
+      </a>
+
+      <button
+        type="button"
+        data-menu-open
+        aria-controls="mobile-nav"
+        aria-expanded="false"
+        aria-label="Abrir menú"
+        class="transition-colors hover:text-sun xl:hidden"
+      >
+        <svg class="size-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" aria-hidden="true">
+          <path d="M3 6h18M3 12h18M3 18h18"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<MobileNav />
+
+<script>
+  const header = document.querySelector("[data-site-header]");
+
+  if (header instanceof HTMLElement) {
+    const update = () =>
+      document.documentElement.style.setProperty("--header-h", `${header.offsetHeight}px`);
+    new ResizeObserver(update).observe(header);
+    update();
+  }
+
+  document.querySelectorAll<HTMLAnchorElement>("[data-home-link]").forEach((link) =>
+    link.addEventListener("click", (event) => {
+      const trim = (path: string) => path.replace(/\/+$/, "");
+      if (trim(new URL(link.href).pathname) === trim(window.location.pathname)) {
+        event.preventDefault();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    }),
+  );
+</script>

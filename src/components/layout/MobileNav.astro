@@ -1,0 +1,117 @@
+---
+import { site } from "../../config/site";
+import { withBase } from "../../utils/url";
+import Bean from "../ui/Bean.astro";
+import Logo from "./Logo.astro";
+---
+
+<dialog
+  id="mobile-nav"
+  aria-label="Menú"
+  class="m-0 h-dvh max-h-none w-full max-w-none border-0 bg-ink p-0 text-cream"
+>
+  <div class="mx-auto flex min-h-full w-[88%] flex-col py-[1.5rem]">
+    <div class="flex items-center justify-between">
+      <Logo />
+      <button
+        type="button"
+        data-menu-close
+        class="flex items-center gap-[0.6rem] font-display text-[clamp(1.8rem,7vw,2.4rem)] uppercase leading-none"
+      >
+        Cerrar
+        <svg class="size-8 text-chili" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" aria-hidden="true">
+          <path d="M5 5l14 14M19 5L5 19"></path>
+        </svg>
+      </button>
+    </div>
+
+    <form role="search" data-mock-search class="mt-[2.5rem]">
+      <label
+        for="mobile-search"
+        class="flex items-center gap-[0.5rem] font-display text-[clamp(1.6rem,6vw,2.1rem)] uppercase leading-none"
+      >
+        <svg class="size-5 text-leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" aria-hidden="true">
+          <circle cx="10.5" cy="10.5" r="7"></circle>
+          <path d="M16 16l6 6"></path>
+        </svg>
+        Buscar
+      </label>
+      <div class="mt-[0.6rem] flex bg-cream p-[0.35rem]">
+        <input
+          id="mobile-search"
+          type="search"
+          name="q"
+          placeholder="Escribe tu búsqueda"
+          class="w-[65%] bg-transparent px-[0.6rem] font-body text-ink placeholder:text-ink/50 focus:outline-none"
+        />
+        <button type="submit" class="w-[35%] bg-leaf py-[0.6rem] font-body font-bold uppercase text-cream">
+          Buscar
+        </button>
+      </div>
+    </form>
+
+    <nav aria-label="Menú móvil" class="mt-[2.5rem]">
+      <ul class="flex flex-col gap-[0.4rem]">
+        <li>
+          <a
+            href={withBase("/carrito")}
+            class="flex items-center gap-[0.7rem] font-display text-[clamp(1.9rem,8vw,2.6rem)] uppercase leading-[1.15] transition-colors hover:text-sun"
+          >
+            <svg class="size-5 text-leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M1.5 3h3l2.7 12h12l2.3-8.5H6"></path>
+              <circle cx="9.5" cy="20" r="1.6" fill="currentColor"></circle>
+              <circle cx="18" cy="20" r="1.6" fill="currentColor"></circle>
+            </svg>
+            Carrito
+            <span class="text-[0.7em] text-amber">({site.cartCount})</span>
+          </a>
+        </li>
+        {
+          site.nav.primary.map((item) => (
+            <li>
+              <a
+                href={withBase(item.href)}
+                class="flex items-center gap-[0.7rem] font-display text-[clamp(1.9rem,8vw,2.6rem)] uppercase leading-[1.15] transition-colors hover:text-sun"
+              >
+                <Bean class="size-5 text-leaf" />
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</dialog>
+
+<script>
+  const dialog = document.getElementById("mobile-nav");
+
+  if (dialog instanceof HTMLDialogElement) {
+    const openers = document.querySelectorAll("[data-menu-open]");
+
+    const setExpanded = (value: boolean) =>
+      openers.forEach((button) => button.setAttribute("aria-expanded", String(value)));
+
+    openers.forEach((button) =>
+      button.addEventListener("click", () => {
+        dialog.showModal();
+        document.documentElement.style.overflow = "hidden";
+        setExpanded(true);
+      }),
+    );
+
+    dialog.querySelector("[data-menu-close]")?.addEventListener("click", () => dialog.close());
+    dialog.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => dialog.close()));
+    dialog.querySelector("[data-mock-search]")?.addEventListener("submit", (event) => event.preventDefault());
+
+    dialog.addEventListener("close", () => {
+      document.documentElement.style.overflow = "";
+      setExpanded(false);
+    });
+
+    window.matchMedia("(min-width: 80rem)").addEventListener("change", (event) => {
+      if (event.matches && dialog.open) dialog.close();
+    });
+  }
+</script>

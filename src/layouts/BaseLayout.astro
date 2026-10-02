@@ -1,0 +1,39 @@
+---
+import "../styles/global.css";
+import Header from "../components/layout/Header.astro";
+import { site } from "../config/site";
+import { withBase } from "../utils/url";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description = site.description } = Astro.props;
+const pageTitle = title ? `${title} | ${site.name}` : `${site.name} | ${site.tagline}`;
+---
+
+<!doctype html>
+<html lang={site.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <style is:inline>html{background-color:#fcf6e5}</style>
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href={withBase("/favicon.svg")} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Josefin+Sans:wght@400;600;700&family=Pacifico&display=swap"
+    />
+  </head>
+  <body class="min-h-dvh bg-cream font-body text-ink">
+    <Header />
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>

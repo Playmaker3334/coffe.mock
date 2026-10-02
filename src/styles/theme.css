@@ -1,0 +1,21 @@
+@theme {
+  --color-cream: #fcf6e5;
+  --color-cream-dark: #f2e8cf;
+  --color-ink: #1f2229;
+  --color-sun: #f2c12e;
+  --color-sun-soft: #f7dc8a;
+  --color-roast: #5a3a22;
+  --color-henequen: #3f6b2e;
+  --color-rosa: #c92a6a;
+  --color-teal-deep: #0e4446;
+  --color-amber: #f5a623;
+  --color-leaf: #6e9a3b;
+  --color-chili: #e0303b;
+  --color-coral: #ee6a55;
+  --color-plum: #8e1279;
+  --color-orange: #e57b3c;
+
+  --font-display: "Anton", "Arial Narrow", sans-serif;
+  --font-script: "Pacifico", cursive;
+  --font-body: "Josefin Sans", system-ui, sans-serif;
+}

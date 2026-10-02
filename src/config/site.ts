@@ -1,0 +1,65 @@
+export const site = {
+  name: "Cafetería",
+  tagline: "Mérida",
+  lang: "es-MX",
+  description: "Café de especialidad tostado en Mérida, Yucatán.",
+  cartCount: 0,
+  hero: {
+    alt: "Fachada de la cafetería con terraza al frente",
+  },
+  highlights: [
+    {
+      kicker: "Lorem ipsum",
+      title: "Café de origen",
+      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      cta: "Lorem ipsum",
+      href: "/menu",
+      color: "bg-roast",
+      icon: "cup",
+    },
+    {
+      kicker: "Dolor sit amet",
+      title: "Cocina de casa",
+      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      cta: "Lorem ipsum",
+      href: "/menu",
+      color: "bg-henequen",
+      icon: "plate",
+    },
+    {
+      kicker: "Consectetur",
+      title: "Pan y postres",
+      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      cta: "Lorem ipsum",
+      href: "/menu",
+      color: "bg-rosa",
+      icon: "cake",
+    },
+    {
+      kicker: "Adipiscing elit",
+      title: "Música y eventos",
+      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      cta: "Lorem ipsum",
+      href: "/nosotros",
+      color: "bg-orange",
+      icon: "music",
+    },
+  ],
+  whyUs: {
+    kicker: "Lorem ipsum dolor",
+    title: "¿Por qué elegirnos?",
+    alt: "Persona pensando",
+    paragraphs: [
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua?",
+      "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.",
+    ],
+  },
+  nav: {
+    primary: [
+      { label: "Tienda en línea", href: "/productos" },
+      { label: "Dónde encontrarnos", href: "/sucursales" },
+      { label: "Menú", href: "/menu" },
+      { label: "Nosotros", href: "/nosotros" },
+    ],
+  },
+} as const;

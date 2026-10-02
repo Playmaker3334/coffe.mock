@@ -1,0 +1,20 @@
+---
+interface Props {
+  class?: string;
+  crease?: string;
+}
+
+const { class: className, crease = "var(--color-ink)" } = Astro.props;
+---
+
+<svg class={className} viewBox="0 0 24 24" aria-hidden="true">
+  <g transform="rotate(35 12 12)">
+    <ellipse cx="12" cy="12" rx="6.5" ry="10" fill="currentColor"></ellipse>
+    <path
+      d="M12 2.5c-2.2 3-2.2 6 0 9.5s2.2 6.5 0 9.5"
+      fill="none"
+      stroke={crease}
+      stroke-width="1.6"
+      stroke-linecap="round"></path>
+  </g>
+</svg>
