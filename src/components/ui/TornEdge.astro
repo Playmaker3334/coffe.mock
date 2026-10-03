@@ -1,0 +1,35 @@
+---
+import { tornEdge } from "../../utils/paper";
+
+interface Props {
+  width: number;
+  seed: number;
+  tilt?: number;
+  side?: "top" | "bottom";
+  flecks?: boolean;
+  class?: string;
+}
+
+const H = 30;
+const { width, seed, tilt = 0, side = "top", flecks = false, class: className } = Astro.props;
+const edge = tornEdge(width, H, seed, tilt, side);
+---
+
+<svg
+  class:list={["absolute inset-x-0 block w-full", side === "top" ? "bottom-[calc(100%-1px)]" : "top-[calc(100%-1px)]", className]}
+  style={`aspect-ratio: ${width} / ${H}`}
+  viewBox={`0 0 ${width} ${H}`}
+  preserveAspectRatio="none"
+  aria-hidden="true"
+>
+  <path d={edge.d} fill="currentColor" />
+  {
+    flecks && (
+      <g class="fill-cream">
+        {edge.flecks.map((f) => (
+          <circle cx={f.cx.toFixed(1)} cy={f.cy.toFixed(1)} r={f.r.toFixed(1)} />
+        ))}
+      </g>
+    )
+  }
+</svg>

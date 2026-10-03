@@ -1,8 +1,8 @@
 ---
 import { getCollection } from "astro:content";
 import { menuTabs } from "../../config/menu";
-import { tornEdge } from "../../utils/paper";
 import Bean from "../ui/Bean.astro";
+import TornEdge from "../ui/TornEdge.astro";
 import MenuCard from "./MenuCard.astro";
 import MenuList from "./MenuList.astro";
 
@@ -15,7 +15,7 @@ const tabs = menuTabs.map((tab, i) => {
     title,
     items: own.filter((item) => item.section === title),
   }));
-  return { ...tab, sections, list: list.filter((item) => item.tab === tab.id), torn: tornEdge(300, 30, 90 + i * 7, 4, "top") };
+  return { ...tab, sections, list: list.filter((item) => item.tab === tab.id), seed: 90 + i * 7 };
 });
 ---
 
@@ -33,14 +33,7 @@ const tabs = menuTabs.map((tab, i) => {
           data-menu-tab={tab.id}
           class="group relative min-w-[8.5rem] flex-1 shrink-0"
         >
-          <svg
-            class:list={["absolute inset-x-0 bottom-[calc(100%-1px)] block aspect-[300/30] w-full", tab.edge]}
-            viewBox="0 0 300 30"
-            preserveAspectRatio="none"
-            aria-hidden="true"
-          >
-            <path d={tab.torn.d} fill="currentColor" />
-          </svg>
+          <TornEdge width={300} seed={tab.seed} tilt={4} class={tab.edge} />
           <span
             class:list={[
               "block px-[1rem] pb-[0.7rem] pt-[0.4rem] text-center font-display text-[clamp(1.3rem,1.9vw,2.1rem)] uppercase leading-none transition-[padding] group-aria-selected:pb-[1.1rem] group-aria-selected:pt-[0.7rem]",

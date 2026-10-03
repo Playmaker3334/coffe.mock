@@ -1,10 +1,11 @@
 ---
-import { getCollection, getEntry } from "astro:content";
+import { getCollection } from "astro:content";
+import { loadSection } from "../../utils/content";
 import ButtonLink from "../ui/ButtonLink.astro";
 import Illustration from "../ui/Illustration.astro";
+import TextBlock from "../ui/TextBlock.astro";
 
-const section = await getEntry("secciones", "lo-mas-pedido");
-if (!section) throw new Error("Falta src/content/secciones/lo-mas-pedido.md");
+const section = await loadSection("lo-mas-pedido");
 
 const items = (await getCollection("masPedido")).sort((a, b) => a.data.order - b.data.order);
 
@@ -23,14 +24,7 @@ const price = new Intl.NumberFormat("es-MX", {
 
 <section class="py-[5rem] lg:py-[7rem]">
   <div class="mx-auto w-[94%]">
-    <header class="text-center">
-      <p class="font-display text-[clamp(1.2rem,1.8vw,1.9rem)] lg:text-[clamp(1.08rem,1.62vw,1.71rem)] uppercase leading-none tracking-wide text-chili">
-        {section.data.kicker}
-      </p>
-      <h2 class="mt-[0.9rem] font-display text-[clamp(3rem,6vw,6.2rem)] lg:text-[clamp(2.7rem,5.4vw,5.58rem)] uppercase leading-[1.05] text-ink">
-        {section.data.title}
-      </h2>
-    </header>
+    <TextBlock kicker={section.data.kicker} title={section.data.title} size="lg" align="center" />
 
     <div class="mt-[3.5rem] grid grid-cols-1 gap-[1.5rem] md:grid-cols-3">
       {

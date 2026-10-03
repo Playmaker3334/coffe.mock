@@ -1,14 +1,11 @@
 ---
 import { Image } from "astro:assets";
-import { getEntry, render } from "astro:content";
+import { loadSection } from "../../utils/content";
+import TextBlock from "../ui/TextBlock.astro";
 
-const entry = await getEntry("secciones", "por-que-elegirnos");
-if (!entry) throw new Error("Falta src/content/secciones/por-que-elegirnos.md");
-
-const { data } = entry;
+const { data, Content } = await loadSection("por-que-elegirnos");
 const { image, alt } = data;
 if (!image || !alt) throw new Error("por-que-elegirnos.md necesita image y alt");
-const { Content } = await render(entry);
 ---
 
 <section class="overflow-x-clip py-[5rem] lg:py-[7rem]">
@@ -38,16 +35,8 @@ const { Content } = await render(entry);
       />
     </div>
 
-    <div>
-      <p class="font-display text-[clamp(1.2rem,1.8vw,1.9rem)] lg:text-[clamp(1.08rem,1.62vw,1.71rem)] uppercase leading-none tracking-wide text-chili">
-        {data.kicker}
-      </p>
-      <h2 class="mt-[0.9rem] font-display text-[clamp(3rem,6vw,6.2rem)] lg:text-[clamp(2.7rem,5.4vw,5.58rem)] uppercase leading-[1.05] text-ink">
-        {data.title}
-      </h2>
-      <div class="mt-[1.6rem] flex flex-col gap-[1.4rem] font-body text-[clamp(1.1rem,1.4vw,1.55rem)] lg:text-[clamp(0.99rem,1.26vw,1.395rem)] leading-relaxed text-ink">
-        <Content />
-      </div>
-    </div>
+    <TextBlock kicker={data.kicker} title={data.title} size="lg" measure={false} bodyClass="flex flex-col gap-[1.4rem] text-ink">
+      <Content />
+    </TextBlock>
   </div>
 </section>

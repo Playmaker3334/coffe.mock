@@ -14,6 +14,7 @@ interface Props {
   href?: string;
   tone?: "light" | "dark" | "ink";
   external?: boolean;
+  measure?: boolean;
   class?: string;
 }
 
@@ -30,6 +31,7 @@ const {
   href,
   tone = "light",
   external = false,
+  measure = true,
   class: className,
 } = Astro.props;
 
@@ -39,6 +41,7 @@ const titleSize = {
 } as const;
 
 const center = align === "center";
+const hasBody = Astro.slots.has("default");
 ---
 
 <div class:list={[center && "text-center", className]}>
@@ -53,15 +56,20 @@ const center = align === "center";
   <Heading class:list={["mt-[0.9rem] font-display uppercase leading-[1.05]", titleSize[size], titleClass]}>
     {title}
   </Heading>
-  <div
-    class:list={[
-      "mt-[1.6rem] max-w-[36rem] font-body text-[clamp(1.1rem,1.4vw,1.55rem)] lg:text-[clamp(0.99rem,1.26vw,1.395rem)] leading-relaxed",
-      center && "mx-auto",
-      bodyClass,
-    ]}
-  >
-    <slot />
-  </div>
+  {
+    hasBody && (
+      <div
+        class:list={[
+          "mt-[1.6rem] font-body text-[clamp(1.1rem,1.4vw,1.55rem)] lg:text-[clamp(0.99rem,1.26vw,1.395rem)] leading-relaxed",
+          measure && "max-w-[36rem]",
+          center && "mx-auto",
+          bodyClass,
+        ]}
+      >
+        <slot />
+      </div>
+    )
+  }
   {
     cta && href && (
       <ButtonLink href={href} tone={tone} external={external} class="mt-[2rem]">

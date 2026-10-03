@@ -1,5 +1,5 @@
 ---
-import { tornEdge } from "../../utils/paper";
+import TornEdge from "./TornEdge.astro";
 
 export type PanelTone = "teal" | "stone" | "mustard" | "sage" | "bright";
 
@@ -22,40 +22,14 @@ const toneClass = {
   bright: { fill: "text-bright", bg: "bg-bright" },
 } as const;
 
-const H = 30;
-const variants = [
-  { width: 1400, show: "max-md:hidden", aspect: "aspect-[1400/30]", top: tornEdge(1400, H, seed, tilt, "top"), bottom: tornEdge(1400, H, seed + 1, -tilt / 3, "bottom") },
-  { width: 500, show: "md:hidden", aspect: "aspect-[500/30]", top: tornEdge(500, H, seed + 2, tilt / 2, "top"), bottom: tornEdge(500, H, seed + 3, -tilt / 4, "bottom") },
-];
 const t = toneClass[tone];
 ---
 
 <div id={id} class:list={["relative", className]}>
-  {
-    variants.map((v) => (
-      <>
-        <svg
-          class:list={["absolute inset-x-0 bottom-[calc(100%-1px)] block w-full", v.aspect, v.show, t.fill]}
-          viewBox={`0 0 ${v.width} ${H}`}
-          preserveAspectRatio="none"
-          aria-hidden="true"
-        >
-          <path d={v.top.d} fill="currentColor" />
-          <g class="fill-cream">
-            {v.top.flecks.map((f) => <circle cx={f.cx.toFixed(1)} cy={f.cy.toFixed(1)} r={f.r.toFixed(1)} />)}
-          </g>
-        </svg>
-        <svg
-          class:list={["absolute inset-x-0 top-[calc(100%-1px)] block w-full", v.aspect, v.show, t.fill]}
-          viewBox={`0 0 ${v.width} ${H}`}
-          preserveAspectRatio="none"
-          aria-hidden="true"
-        >
-          <path d={v.bottom.d} fill="currentColor" />
-        </svg>
-      </>
-    ))
-  }
+  <TornEdge width={1400} seed={seed} tilt={tilt} flecks class:list={["max-md:hidden", t.fill]} />
+  <TornEdge width={1400} seed={seed + 1} tilt={-tilt / 3} side="bottom" class:list={["max-md:hidden", t.fill]} />
+  <TornEdge width={500} seed={seed + 2} tilt={tilt / 2} flecks class:list={["md:hidden", t.fill]} />
+  <TornEdge width={500} seed={seed + 3} tilt={-tilt / 4} side="bottom" class:list={["md:hidden", t.fill]} />
   <div class:list={["relative", t.bg, bodyClass]}>
     <slot />
   </div>
