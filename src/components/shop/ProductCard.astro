@@ -1,0 +1,101 @@
+---
+import { Image } from "astro:assets";
+import { formatPrice } from "../../config/menu";
+import { shopCategories, shopColors } from "../../config/tienda";
+import type { Product } from "../../utils/shop";
+import Bean from "../ui/Bean.astro";
+import Illustration from "../ui/Illustration.astro";
+
+interface Props {
+  product: Product;
+}
+
+const { product: p } = Astro.props;
+const searchText = [p.name, p.sub, shopCategories.find((c) => c.id === p.category)?.label, ...p.notes].filter(Boolean).join(" ");
+const blob = p.color === "teal" ? "text-sun" : p.color === "sun" || p.color === "mustard" ? "text-henequen" : "text-teal";
+---
+
+<article
+  data-product
+  data-id={p.id}
+  data-name={p.name}
+  data-keywords={searchText}
+  data-price={p.price}
+  data-category={p.category}
+  data-flags={p.flags.join(" ")}
+  data-order={p.order}
+  class="flex flex-col bg-ink text-cream"
+>
+  <div class="p-[0.6rem] pb-0 md:p-[0.75rem] md:pb-0">
+    <div class:list={["relative flex aspect-square items-center justify-center overflow-hidden", shopColors[p.color]]}>
+      {
+        p.photo ? (
+          <Image src={p.photo} alt={p.name} widths={[320, 480, 640]} sizes="(min-width: 64rem) 22vw, 45vw" class="h-full w-full object-cover" />
+        ) : (
+          <Illustration name={p.illustration} blobClass={blob} class="w-[55%]" />
+        )
+      }
+      {
+        p.badge && (
+          <span class="absolute left-[0.6rem] top-[0.6rem] -rotate-[3deg] bg-cream px-[0.5rem] py-[0.15rem] font-display text-[0.85rem] uppercase text-ink md:text-[1rem]">
+            {p.badge}
+          </span>
+        )
+      }
+      {
+        p.roast && (
+          <span class="absolute right-[0.6rem] top-[0.6rem] rotate-[4deg] border-[3px] border-chili bg-cream px-[0.45rem] font-display text-[0.9rem] uppercase text-chili md:text-[1.1rem]">
+            {p.roast}
+          </span>
+        )
+      }
+      {
+        p.prep && (
+          <span class="absolute bottom-[0.6rem] right-[0.6rem] bg-ink px-[0.5rem] py-[0.1rem] font-body text-[0.75rem] font-bold md:text-[0.85rem]">
+            {p.prep}
+          </span>
+        )
+      }
+    </div>
+  </div>
+
+  <div class="flex flex-1 flex-col px-[0.9rem] pb-[0.9rem] pt-[0.9rem] md:px-[1.15rem] md:pb-[1rem]">
+    <p class="font-display text-[0.95rem] uppercase leading-none text-sand md:text-[1.1rem]">{p.sub}</p>
+    <h3 class="mt-[0.35rem] font-display text-[clamp(1.2rem,2vw,2.1rem)] uppercase leading-[1.05]">{p.name}</h3>
+    <div class="mt-auto flex items-end justify-between gap-[0.5rem] pt-[1.1rem]">
+      <p class="font-display text-[clamp(1.4rem,2vw,2rem)] leading-none text-sun">
+        {formatPrice(p.price)}
+        {p.oldPrice && <s class="ml-[0.3rem] text-[0.55em] text-chili">{formatPrice(p.oldPrice)}</s>}
+      </p>
+      <div class="shrink-0">
+        <button
+          type="button"
+          data-add
+          aria-label={`Agregar ${p.name}`}
+          class="flex size-[2.4rem] items-center justify-center bg-sun font-display text-[1.7rem] leading-none text-ink transition-colors hover:bg-cream md:size-[2.6rem]"
+        >
+          +
+        </button>
+        <div data-stepper hidden class="flex items-center border-[3px] border-sun font-display text-[1.15rem] leading-none md:text-[1.3rem]">
+          <button type="button" data-step="-1" aria-label={`Quitar un ${p.name}`} class="px-[0.45rem] py-[0.3rem] text-sun hover:bg-sun hover:text-ink md:px-[0.6rem]">−</button>
+          <span data-qty class="bg-sun px-[0.55rem] py-[0.3rem] text-ink" aria-live="polite">0</span>
+          <button type="button" data-step="1" aria-label={`Agregar otro ${p.name}`} class="px-[0.45rem] py-[0.3rem] text-sun hover:bg-sun hover:text-ink md:px-[0.6rem]">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {
+    p.notes.length > 0 && (
+      <p class="flex flex-wrap items-center justify-center gap-x-[0.5rem] bg-chili px-[0.6rem] py-[0.6rem] font-display text-[clamp(0.8rem,1vw,1.05rem)] uppercase text-ink">
+        {p.notes.map((note, i) => (
+          <>
+            {i > 0 && <Bean class="size-3 text-sun" />}
+            {note}
+          </>
+        ))}
+      </p>
+    )
+  }
+  {p.footer && <p class="bg-sun py-[0.6rem] text-center font-display text-[clamp(0.8rem,1vw,1.05rem)] uppercase text-ink">{p.footer}</p>}
+</article>

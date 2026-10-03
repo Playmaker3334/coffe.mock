@@ -1,0 +1,65 @@
+---
+import { delivery } from "../../config/tienda";
+---
+
+<div data-delivery-box class="border-[3px] border-ink bg-paper p-[1.1rem]">
+  <fieldset class="grid grid-cols-2 border-[3px] border-ink font-display text-[1.25rem] uppercase">
+    <legend class="sr-only">Tipo de entrega</legend>
+    {
+      [
+        ["domicilio", "A domicilio"],
+        ["recoger", "Recoger"],
+      ].map(([value, label], i) => (
+        <label class="cursor-pointer px-[1.4rem] py-[0.5rem] text-center has-checked:bg-ink has-checked:text-sun">
+          <input type="radio" name="delivery-mode" value={value} checked={i === 0} class="sr-only" />
+          {label}
+        </label>
+      ))
+    }
+  </fieldset>
+
+  <div class="mt-[0.9rem] flex items-end justify-between gap-[1.5rem] font-body">
+    <label class="block" data-zone-wrap>
+      <span class="block text-[0.8rem] font-bold uppercase tracking-wider text-caramel">Entregar en</span>
+      <select data-zone class="mt-[0.2rem] cursor-pointer bg-transparent font-display text-[1.4rem] uppercase leading-none focus:outline-none">
+        {delivery.zones.map((zone) => <option value={zone.id}>{zone.name}, Mérida</option>)}
+      </select>
+    </label>
+    <p class="text-right">
+      <span class="block text-[0.8rem] font-bold uppercase tracking-wider text-caramel" data-eta-label>Llega en</span>
+      <span class="font-display text-[1.4rem] uppercase leading-none text-terracotta" data-eta>{delivery.zones[0].eta}</span>
+    </p>
+  </div>
+</div>
+
+<script>
+  import { delivery } from "../../config/tienda";
+  import { cart } from "../../utils/cart";
+
+  const box = document.querySelector<HTMLElement>("[data-delivery-box]");
+
+  if (box) {
+    const radios = [...box.querySelectorAll<HTMLInputElement>("input[name=delivery-mode]")];
+    const zone = box.querySelector<HTMLSelectElement>("[data-zone]")!;
+    const zoneWrap = box.querySelector<HTMLElement>("[data-zone-wrap]")!;
+    const eta = box.querySelector<HTMLElement>("[data-eta]")!;
+    const etaLabel = box.querySelector<HTMLElement>("[data-eta-label]")!;
+
+    const save = () => {
+      const mode = radios.find((radio) => radio.checked)?.value === "recoger" ? "recoger" : "domicilio";
+      cart.setDelivery(mode, zone.value);
+    };
+
+    radios.forEach((radio) => radio.addEventListener("change", save));
+    zone.addEventListener("change", save);
+
+    cart.subscribe((state) => {
+      radios.forEach((radio) => (radio.checked = radio.value === state.mode));
+      if (state.zone) zone.value = state.zone;
+      const pickup = state.mode === "recoger";
+      zoneWrap.style.visibility = pickup ? "hidden" : "";
+      etaLabel.textContent = pickup ? "Listo en" : "Llega en";
+      eta.textContent = pickup ? delivery.pickupEta : (delivery.zones.find((z) => z.id === zone.value) ?? delivery.zones[0]).eta;
+    });
+  }
+</script>

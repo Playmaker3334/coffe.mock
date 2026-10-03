@@ -46,13 +46,15 @@ const isActive = (href: string) => withBase(href).replace(/\/$/, "") === current
       </button>
 
       <a
-        href={withBase("/carrito")}
-        aria-label={`Carrito, ${site.cartCount} artículos`}
+        href={withBase("/productos#carrito")}
+        data-cart-open
+        data-cart-label
+        aria-label="Carrito, 0 artículos"
         class="relative mr-[1.6rem] lg:mr-[1.44rem] transition-colors hover:text-sun"
       >
         <Icon name="cart" class="size-9 lg:size-[2.025rem]" />
-        <span class="absolute -right-[1.6rem] -top-[0.7rem] font-display text-[1.6rem] lg:-right-[1.44rem] lg:-top-[0.63rem] lg:text-[1.44rem] leading-none text-amber">
-          ({site.cartCount})
+        <span data-cart-count class="absolute -right-[1.6rem] -top-[0.7rem] font-display text-[1.6rem] lg:-right-[1.44rem] lg:-top-[0.63rem] lg:text-[1.44rem] leading-none text-amber">
+          (0)
         </span>
       </a>
 
@@ -73,6 +75,14 @@ const isActive = (href: string) => withBase(href).replace(/\/$/, "") === current
 <MobileNav />
 
 <script>
+  import { cart } from "../../utils/cart";
+
+  cart.subscribe(() => {
+    const count = cart.count();
+    document.querySelectorAll("[data-cart-count]").forEach((el) => (el.textContent = `(${count})`));
+    document.querySelectorAll("[data-cart-label]").forEach((el) => el.setAttribute("aria-label", `Carrito, ${count} artículos`));
+  });
+
   const header = document.querySelector("[data-site-header]");
 
   if (header instanceof HTMLElement) {

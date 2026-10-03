@@ -1,0 +1,27 @@
+---
+---
+
+<div data-mobile-cart hidden class="md:hidden">
+  <div class="h-[4.8rem]" aria-hidden="true"></div>
+  <div class="fixed inset-x-0 bottom-0 z-30 bg-ink px-[1rem] py-[0.8rem]">
+    <button type="button" data-cart-open class="flex w-full items-center justify-between bg-sun px-[1rem] py-[0.75rem] font-display text-[1.25rem] uppercase text-ink">
+      <span data-mobile-count>Ver pedido</span>
+      <span data-mobile-total></span>
+    </button>
+  </div>
+</div>
+
+<script>
+  import { formatPrice } from "../../config/menu";
+  import { cart } from "../../utils/cart";
+
+  const bar = document.querySelector<HTMLElement>("[data-mobile-cart]");
+  if (bar) {
+    cart.subscribe(() => {
+      const count = cart.count();
+      bar.hidden = count === 0;
+      bar.querySelector("[data-mobile-count]")!.textContent = `Ver pedido (${count})`;
+      bar.querySelector("[data-mobile-total]")!.textContent = formatPrice(cart.subtotal());
+    });
+  }
+</script>

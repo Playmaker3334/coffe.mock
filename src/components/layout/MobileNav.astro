@@ -53,12 +53,13 @@ const isActive = (href: string) => withBase(href).replace(/\/$/, "") === current
       <ul class="flex flex-col gap-[0.4rem]">
         <li>
           <a
-            href={withBase("/carrito")}
+            href={withBase("/productos#carrito")}
+            data-cart-open
             class="flex items-center gap-[0.7rem] font-display text-[clamp(1.9rem,8vw,2.6rem)] uppercase leading-[1.15] transition-colors hover:text-sun"
           >
             <Icon name="cart" class="size-5 text-leaf" strokeWidth={3} />
             Carrito
-            <span class="text-[0.7em] text-amber">({site.cartCount})</span>
+            <span data-cart-count class="text-[0.7em] text-amber">(0)</span>
           </a>
         </li>
         {

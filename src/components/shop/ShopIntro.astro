@@ -1,0 +1,22 @@
+---
+import { loadSection } from "../../utils/content";
+import { withBase } from "../../utils/url";
+import Bean from "../ui/Bean.astro";
+import DeliveryBox from "./DeliveryBox.astro";
+
+const { data } = await loadSection("tienda-intro");
+---
+
+<section class="mx-auto grid w-[94%] grid-cols-1 items-end gap-[2rem] pt-[3rem] lg:grid-cols-[1fr_auto]">
+  <div>
+    <nav aria-label="Ruta" class="flex items-center gap-[0.6rem] font-body text-[1.05rem] font-bold uppercase tracking-wide">
+      <a href={withBase("/")} class="border-b-2 border-sand transition-colors hover:text-caramel">{data.kicker}</a>
+      <Bean class="size-4 text-amber" />
+      <span aria-current="page" class="text-chili">Tienda</span>
+    </nav>
+    <h1 class="mt-[1rem] font-display text-[clamp(3rem,6vw,6.2rem)] uppercase leading-[1.05] lg:text-[clamp(2.7rem,5.4vw,5.58rem)]">
+      {data.title}
+    </h1>
+  </div>
+  <DeliveryBox />
+</section>

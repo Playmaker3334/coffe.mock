@@ -1,0 +1,24 @@
+---
+import Bean from "./Bean.astro";
+
+interface Props {
+  as?: "h2" | "h3";
+  class?: string;
+  ornamentClass?: string;
+}
+
+const { as: Heading = "h2", class: className, ornamentClass = "text-amber" } = Astro.props;
+---
+
+<Heading
+  class:list={[
+    "flex items-center justify-center gap-[0.5rem] text-center font-display text-[clamp(2rem,4.2vw,4.2rem)] uppercase leading-none md:gap-[1rem]",
+    className,
+  ]}
+>
+  <Bean class:list={["hidden size-7 shrink-0 md:block", ornamentClass]} />
+  <Bean class="size-5 shrink-0 text-leaf" />
+  <slot />
+  <Bean class="size-5 shrink-0 text-leaf" />
+  <Bean class:list={["hidden size-7 shrink-0 md:block", ornamentClass]} />
+</Heading>

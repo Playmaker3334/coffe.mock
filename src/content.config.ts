@@ -1,9 +1,10 @@
-import { defineCollection } from "astro:content";
+import { defineCollection, reference } from "astro:content";
 import { file, glob } from "astro/loaders";
 import { z } from "astro/zod";
 import { iconNames } from "./components/ui/icons";
 import { illustrationNames } from "./components/ui/illustrations";
 import { menuTabIds, menuTagIds } from "./config/menu";
+import { shopCategoryIds, shopColorIds, shopFlagIds, shopSectionIds } from "./config/tienda";
 
 const destacados = defineCollection({
   loader: file("src/content/destacados.json"),
@@ -81,6 +82,36 @@ const menuLista = defineCollection({
   }),
 });
 
+const shopBase = {
+  section: z.enum(shopSectionIds),
+  category: z.enum(shopCategoryIds),
+  order: z.number(),
+  sub: z.string(),
+  color: z.enum(shopColorIds),
+  badge: z.string().optional(),
+  prep: z.string().optional(),
+  flags: z.array(z.enum(shopFlagIds)).default([]),
+};
+
+const tienda = defineCollection({
+  loader: file("src/content/tienda.json"),
+  schema: z.discriminatedUnion("source", [
+    z.object({ ...shopBase, source: z.literal("menu"), item: reference("menu") }),
+    z.object({
+      ...shopBase,
+      source: z.literal("propio"),
+      name: z.string(),
+      price: z.number(),
+      oldPrice: z.number().optional(),
+      photo: z.string().optional(),
+      illustration: z.enum(illustrationNames).default("coffeeBag"),
+      roast: z.string().optional(),
+      notes: z.array(z.string()).default([]),
+      footer: z.string().optional(),
+    }),
+  ]),
+});
+
 const secciones = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/secciones" }),
   schema: ({ image }) =>
@@ -95,4 +126,4 @@ const secciones = defineCollection({
     }),
 });
 
-export const collections = { destacados, masPedido, menu, menuLista, notas, productores, secciones };
+export const collections = { destacados, masPedido, menu, menuLista, notas, productores, secciones, tienda };

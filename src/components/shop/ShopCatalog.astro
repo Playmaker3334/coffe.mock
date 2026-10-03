@@ -1,0 +1,175 @@
+---
+import { shopCategories, shopFlags, shopSections } from "../../config/tienda";
+import { getProducts } from "../../utils/shop";
+import Icon from "../ui/Icon.astro";
+import Illustration from "../ui/Illustration.astro";
+import OrnamentHeading from "../ui/OrnamentHeading.astro";
+import ProductCard from "./ProductCard.astro";
+
+const products = await getProducts();
+const categories = shopCategories.filter((c) => products.some((p) => p.category === c.id));
+const flags = shopFlags.filter((f) => products.some((p) => p.flags.includes(f.id)));
+const sections = shopSections.map((s) => ({ ...s, products: products.filter((p) => p.section === s.id) })).filter((s) => s.products.length > 0);
+---
+
+<div data-catalog>
+  <nav aria-label="Categorías" class="mx-auto mt-[2.5rem] w-[94%] bg-stone px-[2%] py-[1.6rem] md:py-[2rem]">
+    <ul class="flex gap-[1rem] overflow-x-auto [scrollbar-width:none] md:justify-center md:gap-[2.5%]">
+      {
+        categories.map((c) => (
+          <li class="w-[6.2rem] shrink-0 md:w-[clamp(7rem,10vw,10rem)]">
+            <button type="button" data-category-filter={c.id} aria-pressed="false" class="group w-full text-center">
+              <span class="mx-auto flex aspect-square w-[88%] items-center justify-center rounded-full bg-cream outline-[3px] outline-offset-4 outline-transparent transition-[outline-color] group-hover:outline-ink/40 group-aria-pressed:outline-ink">
+                <Illustration name={c.illustration} blobClass={c.blob} class="w-[72%]" />
+              </span>
+              <span class="mt-[0.7rem] block font-display text-[clamp(1rem,1.3vw,1.4rem)] uppercase leading-none">{c.label}</span>
+            </button>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+
+  <div class="mx-auto mt-[2rem] flex w-[94%] flex-wrap items-center gap-[0.8rem]">
+    <label class="flex min-w-[16rem] flex-1 items-center gap-[0.6rem] border-[3px] border-ink bg-paper px-[1rem] py-[0.55rem]">
+      <Icon name="search" class="size-5 shrink-0" />
+      <span class="sr-only">Buscar</span>
+      <input data-search type="search" placeholder="Busca un café, pan o regalo…" class="w-full bg-transparent font-body placeholder:text-ink/50 focus:outline-none" />
+    </label>
+    <div class="flex w-full gap-[0.6rem] overflow-x-auto [scrollbar-width:none] lg:w-auto">
+      {
+        flags.map((f) => (
+          <button
+            type="button"
+            data-flag-filter={f.id}
+            aria-pressed="false"
+            class="shrink-0 border-[3px] border-ink bg-paper px-[1rem] py-[0.4rem] font-display text-[1.1rem] uppercase transition-colors hover:bg-sun-soft aria-pressed:bg-ink aria-pressed:text-sun"
+          >
+            {f.label}
+          </button>
+        ))
+      }
+    </div>
+    <label class="flex items-center gap-[0.4rem] font-body text-[0.95rem] font-bold uppercase lg:ml-auto">
+      Ordenar:
+      <select data-sort class="cursor-pointer bg-transparent underline focus:outline-none">
+        <option value="order">Recomendados</option>
+        <option value="asc">Precio: menor a mayor</option>
+        <option value="desc">Precio: mayor a menor</option>
+      </select>
+    </label>
+  </div>
+
+  {
+    sections.map((section, i) => (
+      <>
+        <section id={section.id} data-shop-section class="mx-auto mt-[4rem] w-[94%] scroll-mt-[calc(var(--header-h,5rem)+2rem)]">
+          <OrnamentHeading>{section.title}</OrnamentHeading>
+          {section.note && <p class="mt-[0.8rem] text-center font-body text-[1.05rem]">{section.note}</p>}
+          <div data-grid class="mt-[2.5rem] grid grid-cols-2 gap-[0.8rem] lg:grid-cols-4 lg:gap-[2.2%]">
+            {section.products.map((product) => <ProductCard product={product} />)}
+          </div>
+        </section>
+        {i === 0 && <slot name="between" />}
+      </>
+    ))
+  }
+
+  <div data-empty hidden class="mx-auto mt-[4rem] w-[94%] border-[3px] border-dashed border-ink/40 py-[3rem] text-center">
+    <p class="font-display text-[2rem] uppercase">No encontramos nada</p>
+    <button type="button" data-clear-filters class="mt-[1rem] font-body font-bold uppercase underline">Quitar filtros</button>
+  </div>
+</div>
+
+<script>
+  import { cart } from "../../utils/cart";
+
+  const root = document.querySelector<HTMLElement>("[data-catalog]");
+
+  if (root) {
+    const cards = [...root.querySelectorAll<HTMLElement>("[data-product]")];
+    const categoryButtons = [...root.querySelectorAll<HTMLButtonElement>("[data-category-filter]")];
+    const flagButtons = [...root.querySelectorAll<HTMLButtonElement>("[data-flag-filter]")];
+    const search = root.querySelector<HTMLInputElement>("[data-search]")!;
+    const sort = root.querySelector<HTMLSelectElement>("[data-sort]")!;
+    const empty = root.querySelector<HTMLElement>("[data-empty]")!;
+    const normalize = (text: string) => text.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+
+    let category = "";
+    let flag = "";
+
+    const apply = () => {
+      const query = normalize(search.value.trim());
+      let visible = 0;
+
+      cards.forEach((card) => {
+        const show =
+          (!category || card.dataset.category === category) &&
+          (!flag || (card.dataset.flags ?? "").split(" ").includes(flag)) &&
+          (!query || normalize(card.dataset.keywords ?? "").includes(query));
+        card.hidden = !show;
+        if (show) visible++;
+      });
+
+      root.querySelectorAll<HTMLElement>("[data-shop-section]").forEach((section) => {
+        section.hidden = !section.querySelector("[data-product]:not([hidden])");
+      });
+
+      const filtering = Boolean(category || flag || query);
+      document.querySelectorAll<HTMLElement>("[data-hide-when-filtering]").forEach((el) => (el.hidden = filtering));
+      empty.hidden = visible > 0;
+
+      categoryButtons.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.categoryFilter === category)));
+      flagButtons.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.flagFilter === flag)));
+    };
+
+    const reorder = () => {
+      root.querySelectorAll<HTMLElement>("[data-grid]").forEach((grid) => {
+        const items = [...grid.querySelectorAll<HTMLElement>("[data-product]")];
+        const key = (el: HTMLElement) => Number(sort.value === "order" ? el.dataset.order : el.dataset.price);
+        items.sort((a, b) => (sort.value === "desc" ? key(b) - key(a) : key(a) - key(b))).forEach((el) => grid.append(el));
+      });
+    };
+
+    categoryButtons.forEach((b) =>
+      b.addEventListener("click", () => {
+        category = category === b.dataset.categoryFilter ? "" : (b.dataset.categoryFilter ?? "");
+        apply();
+      }),
+    );
+    flagButtons.forEach((b) =>
+      b.addEventListener("click", () => {
+        flag = flag === b.dataset.flagFilter ? "" : (b.dataset.flagFilter ?? "");
+        apply();
+      }),
+    );
+    search.addEventListener("input", apply);
+    sort.addEventListener("change", reorder);
+    root.querySelector("[data-clear-filters]")?.addEventListener("click", () => {
+      category = "";
+      flag = "";
+      search.value = "";
+      apply();
+    });
+
+    cards.forEach((card) => {
+      const product = { id: card.dataset.id ?? "", name: card.dataset.name ?? "", price: Number(card.dataset.price) };
+      card.querySelector("[data-add]")?.addEventListener("click", () => {
+        cart.change(product, 1);
+        card.querySelector<HTMLElement>('[data-step="1"]')?.focus();
+      });
+      card.querySelectorAll<HTMLElement>("[data-step]").forEach((button) =>
+        button.addEventListener("click", () => cart.change(product, Number(button.dataset.step))),
+      );
+    });
+
+    cart.subscribe(() => {
+      cards.forEach((card) => {
+        const qty = cart.qty(card.dataset.id ?? "");
+        card.querySelector<HTMLElement>("[data-add]")!.hidden = qty > 0;
+        card.querySelector<HTMLElement>("[data-stepper]")!.hidden = qty === 0;
+        card.querySelector<HTMLElement>("[data-qty]")!.textContent = String(qty);
+      });
+    });
+  }
+</script>

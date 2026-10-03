@@ -1,0 +1,19 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import CartDrawer from "../components/shop/CartDrawer.astro";
+import MobileCartBar from "../components/shop/MobileCartBar.astro";
+import ProductStory from "../components/shop/ProductStory.astro";
+import ShopCatalog from "../components/shop/ShopCatalog.astro";
+import ShopIntro from "../components/shop/ShopIntro.astro";
+import ShopStrip from "../components/shop/ShopStrip.astro";
+---
+
+<BaseLayout title="Tienda en línea">
+  <ShopStrip />
+  <ShopIntro />
+  <ShopCatalog>
+    <ProductStory slot="between" />
+  </ShopCatalog>
+  <MobileCartBar />
+  <CartDrawer />
+</BaseLayout>

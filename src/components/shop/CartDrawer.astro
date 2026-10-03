@@ -1,0 +1,220 @@
+---
+import { delivery } from "../../config/tienda";
+import Icon from "../ui/Icon.astro";
+
+const field = "w-full border-2 border-ink bg-paper px-[0.8rem] py-[0.55rem] font-body text-[0.95rem] placeholder:text-ink/50 focus:outline-none focus-visible:border-caramel";
+---
+
+<dialog
+  id="cart-drawer"
+  aria-label="Tu pedido"
+  class="m-0 ml-auto h-dvh max-h-none w-[30rem] max-w-full border-0 bg-cream p-0 text-ink backdrop:bg-ink/60"
+>
+  <form data-order-form class="flex h-full flex-col" novalidate>
+    <header class="flex items-center justify-between bg-ink px-[1.5rem] py-[1.1rem] text-cream">
+      <p class="font-display text-[2rem] uppercase leading-none">Tu pedido <span class="text-amber" data-drawer-count>(0)</span></p>
+      <button type="button" data-cart-close aria-label="Cerrar pedido">
+        <Icon name="close" class="size-7 text-chili" />
+      </button>
+    </header>
+
+    <div class="flex-1 overflow-y-auto px-[1.5rem] py-[1.2rem]">
+      <div data-cart-empty class="py-[3rem] text-center">
+        <p class="font-display text-[1.8rem] uppercase">Tu pedido está vacío</p>
+        <p class="mt-[0.5rem] font-body">Agrega algo de la tienda para empezar.</p>
+      </div>
+
+      <div data-cart-filled hidden>
+        <div data-free class="bg-paper p-[0.9rem]">
+          <p data-free-text class="font-body text-[0.95rem]"></p>
+          <div class="mt-[0.5rem] h-[0.6rem] bg-stone"><div data-free-bar class="h-full bg-leaf transition-[width]"></div></div>
+        </div>
+
+        <ul data-cart-list class="mt-[0.6rem]"></ul>
+
+        <template data-cart-row>
+          <li class="flex items-start gap-[0.9rem] border-b-2 border-dashed border-ink/20 py-[0.9rem]">
+            <div class="flex-1">
+              <p data-row-name class="font-display text-[1.35rem] uppercase leading-[1.05]"></p>
+              <div class="mt-[0.5rem] inline-flex border-2 border-ink font-display text-[1.1rem] leading-none">
+                <button type="button" data-row-step="-1" class="px-[0.55rem] py-[0.2rem] hover:bg-sun-soft">−</button>
+                <span data-row-qty class="bg-ink px-[0.65rem] py-[0.2rem] text-cream"></span>
+                <button type="button" data-row-step="1" class="px-[0.55rem] py-[0.2rem] hover:bg-sun-soft">+</button>
+              </div>
+            </div>
+            <p data-row-total class="font-display text-[1.4rem] text-terracotta"></p>
+          </li>
+        </template>
+
+        <fieldset class="mt-[1.4rem] grid grid-cols-2 gap-[0.7rem]">
+          <legend class="mb-[0.6rem] font-display text-[1.3rem] uppercase">Tus datos</legend>
+          <div class="col-span-2 grid grid-cols-2 border-2 border-ink font-display text-[1.1rem] uppercase">
+            {
+              [
+                ["domicilio", "A domicilio"],
+                ["recoger", "Recoger"],
+              ].map(([value, label]) => (
+                <label class="cursor-pointer py-[0.4rem] text-center has-checked:bg-ink has-checked:text-sun">
+                  <input type="radio" name="drawer-mode" value={value} class="sr-only" />
+                  {label}
+                </label>
+              ))
+            }
+          </div>
+          <input name="nombre" required autocomplete="name" placeholder="Nombre" class:list={[field, "col-span-2"]} />
+          <input name="telefono" required type="tel" autocomplete="tel" inputmode="tel" placeholder="Teléfono" class={field} />
+          <select name="zona" data-drawer-zone class={field} aria-label="Colonia">
+            {delivery.zones.map((zone) => <option value={zone.id}>{zone.name}</option>)}
+          </select>
+          <input name="direccion" data-address required autocomplete="street-address" placeholder="Calle, número y cruzamientos" class:list={[field, "col-span-2"]} />
+          <input name="referencias" data-address placeholder="Referencias (portón, color de casa…)" class:list={[field, "col-span-2"]} />
+          <select name="hora" class={field} aria-label="Hora">
+            {delivery.times.map((time) => <option>{time}</option>)}
+          </select>
+          <select name="pago" class={field} aria-label="Forma de pago">
+            {delivery.payments.map((payment) => <option>{payment}</option>)}
+          </select>
+        </fieldset>
+        <p data-form-error hidden class="mt-[0.8rem] font-body text-[0.95rem] font-bold text-chili">Completa nombre, teléfono y dirección.</p>
+      </div>
+    </div>
+
+    <footer data-cart-footer hidden class="border-t-[3px] border-ink bg-paper px-[1.5rem] py-[1.1rem] font-body">
+      <p class="flex justify-between"><span>Subtotal</span><span data-subtotal></span></p>
+      <p class="flex justify-between"><span data-fee-label>Envío</span><span data-fee></span></p>
+      <p class="mt-[0.4rem] flex justify-between font-display text-[1.8rem] uppercase leading-none"><span>Total</span><span data-total class="text-terracotta"></span></p>
+      <button type="submit" class="mt-[1rem] w-full bg-leaf py-[0.9rem] font-display text-[1.4rem] uppercase text-cream transition-colors hover:bg-henequen">
+        Enviar pedido por WhatsApp
+      </button>
+      <p data-sent hidden class="mt-[0.7rem] text-center text-[0.9rem]">Se abrió WhatsApp con tu pedido. Envía el mensaje para confirmarlo.</p>
+    </footer>
+  </form>
+</dialog>
+
+<script>
+  import { formatPrice } from "../../config/menu";
+  import { site } from "../../config/site";
+  import { delivery } from "../../config/tienda";
+  import { cart, type CartState } from "../../utils/cart";
+
+  const dialog = document.getElementById("cart-drawer");
+
+  if (dialog instanceof HTMLDialogElement) {
+    const $ = <T extends HTMLElement>(selector: string) => dialog.querySelector<T>(selector)!;
+    const form = $<HTMLFormElement>("[data-order-form]");
+    const list = $<HTMLUListElement>("[data-cart-list]");
+    const row = $<HTMLTemplateElement>("[data-cart-row]");
+    const zoneSelect = $<HTMLSelectElement>("[data-drawer-zone]");
+    const addressFields = [...dialog.querySelectorAll<HTMLInputElement>("[data-address]")];
+    const modeRadios = [...dialog.querySelectorAll<HTMLInputElement>("input[name=drawer-mode]")];
+
+    const zoneOf = (state: CartState) => delivery.zones.find((z) => z.id === state.zone) ?? delivery.zones[0];
+    const feeOf = (state: CartState) => (state.mode === "recoger" || cart.subtotal() >= delivery.freeFrom ? 0 : zoneOf(state).fee);
+
+    const render = (state: CartState) => {
+      const count = cart.count();
+      const subtotal = cart.subtotal();
+      const pickup = state.mode === "recoger";
+      const fee = feeOf(state);
+
+      $("[data-drawer-count]").textContent = `(${count})`;
+      $("[data-cart-empty]").hidden = count > 0;
+      $("[data-cart-filled]").hidden = count === 0;
+      $("[data-cart-footer]").hidden = count === 0;
+
+      list.replaceChildren(
+        ...state.items.map((item) => {
+          const li = row.content.firstElementChild!.cloneNode(true) as HTMLElement;
+          li.querySelector("[data-row-name]")!.textContent = item.name;
+          li.querySelector("[data-row-qty]")!.textContent = String(item.qty);
+          li.querySelector("[data-row-total]")!.textContent = formatPrice(item.qty * item.price);
+          li.querySelectorAll<HTMLElement>("[data-row-step]").forEach((button) =>
+            button.addEventListener("click", () => cart.change(item, Number(button.dataset.rowStep))),
+          );
+          return li;
+        }),
+      );
+
+      const missing = Math.max(0, delivery.freeFrom - subtotal);
+      $("[data-free]").hidden = pickup;
+      $("[data-free-text]").innerHTML = missing > 0 ? `Te faltan <b>${formatPrice(missing)}</b> para <b>envío gratis</b>` : "<b>Tu envío es gratis</b>";
+      $("[data-free-bar]").style.width = `${Math.min(100, (subtotal / delivery.freeFrom) * 100)}%`;
+
+      modeRadios.forEach((radio) => (radio.checked = radio.value === state.mode));
+      zoneSelect.value = zoneOf(state).id;
+      zoneSelect.hidden = pickup;
+      addressFields.forEach((input) => (input.hidden = pickup));
+
+      $("[data-subtotal]").textContent = formatPrice(subtotal);
+      $("[data-fee-label]").textContent = pickup ? "Recoger en tienda" : `Envío (${zoneOf(state).name})`;
+      $("[data-fee]").textContent = pickup ? "—" : fee === 0 ? "Gratis" : formatPrice(fee);
+      $("[data-total]").textContent = formatPrice(subtotal + fee);
+      $("[data-sent]").hidden = true;
+    };
+
+    zoneSelect.addEventListener("change", () => cart.setDelivery(cart.get().mode, zoneSelect.value));
+    modeRadios.forEach((radio) =>
+      radio.addEventListener("change", () => cart.setDelivery(radio.value === "recoger" ? "recoger" : "domicilio", zoneSelect.value)),
+    );
+    form.addEventListener("input", () => ($("[data-form-error]").hidden = true));
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const state = cart.get();
+      const pickup = state.mode === "recoger";
+      const data = new FormData(form);
+      const value = (name: string) => String(data.get(name) ?? "").trim();
+      const required = ["nombre", "telefono", ...(pickup ? [] : ["direccion"])];
+
+      if (required.some((name) => !value(name))) {
+        $("[data-form-error]").hidden = false;
+        return;
+      }
+      $("[data-form-error]").hidden = true;
+
+      const fee = feeOf(state);
+      const lines = [
+        `*Nuevo pedido · ${site.name} ${site.tagline}*`,
+        "",
+        ...state.items.map((item) => `${item.qty} × ${item.name} — ${formatPrice(item.qty * item.price)}`),
+        "",
+        `Subtotal: ${formatPrice(cart.subtotal())}`,
+        pickup ? "Recoger en tienda" : `Envío (${zoneOf(state).name}): ${fee === 0 ? "Gratis" : formatPrice(fee)}`,
+        `*Total: ${formatPrice(cart.subtotal() + fee)}*`,
+        "",
+        `${pickup ? "Recoger" : "A domicilio"} · ${value("hora")}`,
+        ...(pickup ? [] : [`Dirección: ${value("direccion")}, ${zoneOf(state).name}`]),
+        ...(value("referencias") && !pickup ? [`Referencias: ${value("referencias")}`] : []),
+        `Pago: ${value("pago")}`,
+        "",
+        `${value("nombre")} · ${value("telefono")}`,
+      ];
+
+      window.open(`${site.contact.whatsapp}?text=${encodeURIComponent(lines.join("\n"))}`, "_blank", "noopener");
+      $("[data-sent]").hidden = false;
+    });
+
+    const open = () => {
+      if (!dialog.open) dialog.showModal();
+      document.documentElement.style.overflow = "hidden";
+    };
+
+    document.querySelectorAll("[data-cart-open]").forEach((trigger) =>
+      trigger.addEventListener("click", (event) => {
+        event.preventDefault();
+        open();
+      }),
+    );
+    $("[data-cart-close]").addEventListener("click", () => dialog.close());
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+    dialog.addEventListener("close", () => {
+      document.documentElement.style.overflow = "";
+      if (window.location.hash === "#carrito") history.replaceState(null, "", window.location.pathname);
+    });
+
+    cart.subscribe(render);
+    if (window.location.hash === "#carrito") open();
+  }
+</script>

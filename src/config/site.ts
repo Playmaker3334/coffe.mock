@@ -3,7 +3,6 @@ export const site = {
   tagline: "Mérida",
   lang: "es-MX",
   description: "Café de especialidad tostado en Mérida, Yucatán.",
-  cartCount: 0,
   timeZone: "America/Merida",
   hero: {
     alt: "Fachada de la cafetería con terraza al frente",

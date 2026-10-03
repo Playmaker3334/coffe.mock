@@ -1,0 +1,41 @@
+---
+import { site } from "../../config/site";
+import { delivery } from "../../config/tienda";
+import { formatPrice } from "../../config/menu";
+import Bean from "../ui/Bean.astro";
+import TornPanel from "../ui/TornPanel.astro";
+
+const fastest = delivery.zones[0].eta;
+const items = [`Envío gratis desde ${formatPrice(delivery.freeFrom)}`, `Entrega en ${fastest}`];
+---
+
+<div class="mx-auto mt-[2.4rem] w-[97%]">
+  <TornPanel
+    tone="mustard"
+    seed={12}
+    tilt={3}
+    bodyClass="flex flex-wrap items-center justify-center gap-x-[2.5rem] gap-y-[0.4rem] px-[3%] py-[0.8rem] text-center font-display text-[clamp(1.1rem,1.5vw,1.6rem)] uppercase text-ink"
+  >
+    {
+      items.map((text) => (
+        <p class="flex items-center gap-[0.6rem]">
+          <Bean class="size-5 shrink-0 text-ink" />
+          {text}
+        </p>
+      ))
+    }
+    <p class="flex items-center gap-[0.6rem]">
+      <Bean class="size-5 shrink-0 text-ink" />
+      <span data-open-status data-hours={JSON.stringify(site.hours)} data-tz={site.timeZone}>Horario de hoy</span>
+    </p>
+  </TornPanel>
+</div>
+
+<script>
+  import { openStatus } from "../../utils/hours";
+
+  const el = document.querySelector<HTMLElement>("[data-open-status]");
+  if (el?.dataset.hours && el.dataset.tz) {
+    el.textContent = openStatus(JSON.parse(el.dataset.hours), el.dataset.tz).label;
+  }
+</script>
