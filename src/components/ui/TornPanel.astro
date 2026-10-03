@@ -1,0 +1,62 @@
+---
+import { tornEdge } from "../../utils/paper";
+
+export type PanelTone = "teal" | "stone" | "mustard" | "sage" | "bright";
+
+interface Props {
+  tone: PanelTone;
+  seed: number;
+  tilt?: number;
+  id?: string;
+  class?: string;
+  bodyClass?: string;
+}
+
+const { tone, seed, tilt = 6, id, class: className, bodyClass } = Astro.props;
+
+const toneClass = {
+  teal: { fill: "text-teal", bg: "bg-teal" },
+  stone: { fill: "text-stone", bg: "bg-stone" },
+  mustard: { fill: "text-mustard", bg: "bg-mustard" },
+  sage: { fill: "text-sage", bg: "bg-sage" },
+  bright: { fill: "text-bright", bg: "bg-bright" },
+} as const;
+
+const H = 30;
+const variants = [
+  { width: 1400, show: "max-md:hidden", aspect: "aspect-[1400/30]", top: tornEdge(1400, H, seed, tilt, "top"), bottom: tornEdge(1400, H, seed + 1, -tilt / 3, "bottom") },
+  { width: 500, show: "md:hidden", aspect: "aspect-[500/30]", top: tornEdge(500, H, seed + 2, tilt / 2, "top"), bottom: tornEdge(500, H, seed + 3, -tilt / 4, "bottom") },
+];
+const t = toneClass[tone];
+---
+
+<div id={id} class:list={["relative", className]}>
+  {
+    variants.map((v) => (
+      <>
+        <svg
+          class:list={["absolute inset-x-0 bottom-[calc(100%-1px)] block w-full", v.aspect, v.show, t.fill]}
+          viewBox={`0 0 ${v.width} ${H}`}
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <path d={v.top.d} fill="currentColor" />
+          <g class="fill-cream">
+            {v.top.flecks.map((f) => <circle cx={f.cx.toFixed(1)} cy={f.cy.toFixed(1)} r={f.r.toFixed(1)} />)}
+          </g>
+        </svg>
+        <svg
+          class:list={["absolute inset-x-0 top-[calc(100%-1px)] block w-full", v.aspect, v.show, t.fill]}
+          viewBox={`0 0 ${v.width} ${H}`}
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <path d={v.bottom.d} fill="currentColor" />
+        </svg>
+      </>
+    ))
+  }
+  <div class:list={["relative", t.bg, bodyClass]}>
+    <slot />
+  </div>
+</div>

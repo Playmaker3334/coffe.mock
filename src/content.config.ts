@@ -47,6 +47,14 @@ const notas = defineCollection({
   }),
 });
 
+const productores = defineCollection({
+  loader: file("src/content/productores.json"),
+  schema: z.object({
+    order: z.number(),
+    name: z.string(),
+  }),
+});
+
 const secciones = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/secciones" }),
   schema: ({ image }) =>
@@ -61,4 +69,4 @@ const secciones = defineCollection({
     }),
 });
 
-export const collections = { destacados, masPedido, notas, secciones };
+export const collections = { destacados, masPedido, notas, productores, secciones };

@@ -1,0 +1,30 @@
+---
+import { getCollection } from "astro:content";
+import { loadSection } from "../../utils/content";
+import TextBlock from "../ui/TextBlock.astro";
+import TornPanel from "../ui/TornPanel.astro";
+
+const { data, Content } = await loadSection("nosotros-productores");
+const producers = (await getCollection("productores")).sort((a, b) => a.data.order - b.data.order);
+const angles = [-2, 1.5, -1, 2, -1.5, 1];
+---
+
+<section class="py-[2.5rem] lg:py-[3rem]">
+  <TornPanel tone="mustard" seed={41} tilt={-7} class="mx-auto w-[94%]" bodyClass="px-[6%] py-[3rem] lg:py-[3.5rem]">
+    <TextBlock kicker={data.kicker} title={data.title} align="center" kickerClass="text-ink">
+      <Content />
+      <ul slot="after" class="mx-auto mt-[2rem] flex max-w-[60rem] flex-wrap justify-center gap-[0.9rem] lg:gap-[1.1rem]">
+        {
+          producers.map(({ data: producer }, i) => (
+            <li
+              class="border-[3px] border-ink bg-cream px-[1.1rem] py-[0.55rem] font-display text-[clamp(1.1rem,1.4vw,1.5rem)] uppercase tracking-wide text-ink lg:text-[clamp(0.99rem,1.26vw,1.35rem)]"
+              style={`rotate: ${angles[i % angles.length]}deg`}
+            >
+              {producer.name}
+            </li>
+          ))
+        }
+      </ul>
+    </TextBlock>
+  </TornPanel>
+</section>

@@ -1,0 +1,16 @@
+---
+import { loadSection } from "../../utils/content";
+import TornPanel from "../ui/TornPanel.astro";
+
+const { data, Content } = await loadSection("nosotros-cita");
+---
+
+<section aria-label={data.title} class="relative z-10 -mt-[4.5rem] lg:-mt-[5rem]">
+  <TornPanel tone="teal" seed={3} tilt={8} class="mx-auto w-[94%]" bodyClass="px-[7%] py-[2.4rem] lg:py-[3rem]">
+    <blockquote
+      class="mx-auto max-w-[62rem] text-center font-display text-[clamp(1.7rem,3.2vw,3.4rem)] lg:text-[clamp(1.53rem,2.88vw,3.06rem)] uppercase leading-[1.1] text-ink"
+    >
+      <Content />
+    </blockquote>
+  </TornPanel>
+</section>

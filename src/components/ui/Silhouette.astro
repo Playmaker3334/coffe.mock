@@ -1,0 +1,25 @@
+---
+import { silhouettes, type SilhouetteName } from "./silhouettes";
+
+interface Props {
+  name: SilhouetteName;
+  cutClass: string;
+  fillClass?: string;
+  class?: string;
+}
+
+const { name, cutClass, fillClass = "text-ink", class: className } = Astro.props;
+const { viewBox, layers } = silhouettes[name];
+---
+
+<svg class={className} viewBox={viewBox} aria-hidden="true">
+  {
+    layers.map((layer) =>
+      layer.kind === "cutStroke" ? (
+        <path d={layer.d} fill="none" stroke="currentColor" stroke-width={layer.width} stroke-linecap="round" class={cutClass} />
+      ) : (
+        <path d={layer.d} fill="currentColor" class={layer.kind === "cut" ? cutClass : fillClass} />
+      ),
+    )
+  }
+</svg>

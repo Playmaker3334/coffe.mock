@@ -1,0 +1,37 @@
+---
+import { Image } from "astro:assets";
+import { loadSection } from "../../utils/content";
+import TextBlock from "../ui/TextBlock.astro";
+
+const { data, Content } = await loadSection("nosotros-hero");
+if (!data.image || !data.alt) throw new Error("nosotros-hero.md necesita image y alt");
+---
+
+<section class="relative flex min-h-[calc(82svh-var(--header-h,5rem))] items-center overflow-hidden bg-ink pb-[7rem] lg:pb-[8rem]">
+  <Image
+    src={data.image}
+    alt={data.alt}
+    widths={[640, 960, 1280, 1920, 2560]}
+    sizes="100vw"
+    loading="eager"
+    fetchpriority="high"
+    class="absolute inset-0 h-full w-full object-cover"
+  />
+  <div class="absolute inset-0 bg-ink/55" aria-hidden="true"></div>
+
+  <TextBlock
+    as="h1"
+    size="lg"
+    kicker={data.kicker}
+    title={data.title}
+    kickerClass="text-sun"
+    titleClass="text-cream"
+    bodyClass="text-cream"
+    cta={data.cta}
+    href={data.href}
+    tone="dark"
+    class="relative mx-auto w-[90%] pt-[4rem]"
+  >
+    <Content />
+  </TextBlock>
+</section>

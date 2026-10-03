@@ -11,7 +11,7 @@ interface Props {
 
 const { href, class: className, tone = "light", external = false } = Astro.props;
 
-const url = /^(https?:|mailto:|tel:)/.test(href) ? href : withBase(href);
+const url = /^(https?:|mailto:|tel:|#)/.test(href) ? href : withBase(href);
 
 const toneClass = {
   light:

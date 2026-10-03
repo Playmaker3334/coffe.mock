@@ -1,0 +1,8 @@
+[
+  { "id": "cafe-chiapas", "order": 1, "name": "Café de Chiapas" },
+  { "id": "miel-yucatan", "order": 2, "name": "Miel de Yucatán" },
+  { "id": "pan-del-dia", "order": 3, "name": "Pan del día" },
+  { "id": "cacao-tabasco", "order": 4, "name": "Cacao de Tabasco" },
+  { "id": "leche-local", "order": 5, "name": "Leche local" },
+  { "id": "fruta-temporada", "order": 6, "name": "Fruta de temporada" }
+]

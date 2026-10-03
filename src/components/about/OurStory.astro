@@ -1,0 +1,16 @@
+---
+import { loadSection } from "../../utils/content";
+import Illustration from "../ui/Illustration.astro";
+import TextBlock from "../ui/TextBlock.astro";
+
+const { data, Content } = await loadSection("nosotros-historia");
+---
+
+<section class="py-[4.5rem] lg:py-[5.5rem]">
+  <div class="mx-auto grid w-[90%] grid-cols-1 items-center gap-[3rem] lg:grid-cols-[1.2fr_1fr] lg:gap-[5%]">
+    <TextBlock kicker={data.kicker} title={data.title} kickerClass="text-rosa" cta={data.cta} href={data.href}>
+      <Content />
+    </TextBlock>
+    <Illustration name="hamaca" blobClass="text-teal" class="mx-auto w-[75%] max-w-[26rem]" />
+  </div>
+</section>

@@ -1,0 +1,73 @@
+---
+import ButtonLink from "./ButtonLink.astro";
+
+interface Props {
+  kicker: string;
+  title: string;
+  as?: "h1" | "h2";
+  size?: "lg" | "md";
+  align?: "left" | "center";
+  kickerClass?: string;
+  titleClass?: string;
+  bodyClass?: string;
+  cta?: string;
+  href?: string;
+  tone?: "light" | "dark" | "ink";
+  external?: boolean;
+  class?: string;
+}
+
+const {
+  kicker,
+  title,
+  as: Heading = "h2",
+  size = "md",
+  align = "left",
+  kickerClass = "text-chili",
+  titleClass = "text-ink",
+  bodyClass = "text-ink",
+  cta,
+  href,
+  tone = "light",
+  external = false,
+  class: className,
+} = Astro.props;
+
+const titleSize = {
+  lg: "text-[clamp(3rem,6vw,6.2rem)] lg:text-[clamp(2.7rem,5.4vw,5.58rem)]",
+  md: "text-[clamp(2.6rem,5vw,5.2rem)] lg:text-[clamp(2.34rem,4.5vw,4.68rem)]",
+} as const;
+
+const center = align === "center";
+---
+
+<div class:list={[center && "text-center", className]}>
+  <p
+    class:list={[
+      "font-display text-[clamp(1.2rem,1.8vw,1.9rem)] lg:text-[clamp(1.08rem,1.62vw,1.71rem)] uppercase leading-none tracking-wide",
+      kickerClass,
+    ]}
+  >
+    {kicker}
+  </p>
+  <Heading class:list={["mt-[0.9rem] font-display uppercase leading-[1.05]", titleSize[size], titleClass]}>
+    {title}
+  </Heading>
+  <div
+    class:list={[
+      "mt-[1.6rem] max-w-[36rem] font-body text-[clamp(1.1rem,1.4vw,1.55rem)] lg:text-[clamp(0.99rem,1.26vw,1.395rem)] leading-relaxed",
+      center && "mx-auto",
+      bodyClass,
+    ]}
+  >
+    <slot />
+  </div>
+  {
+    cta && href && (
+      <ButtonLink href={href} tone={tone} external={external} class="mt-[2rem]">
+        {cta}
+      </ButtonLink>
+    )
+  }
+  <slot name="after" />
+</div>

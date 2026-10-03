@@ -1,0 +1,27 @@
+---
+import { loadSection } from "../../utils/content";
+import Illustration from "../ui/Illustration.astro";
+import TextBlock from "../ui/TextBlock.astro";
+import TornPanel from "../ui/TornPanel.astro";
+
+const { data, Content } = await loadSection("nosotros-trabaja");
+---
+
+<section class="pb-[2.5rem] pt-[5.5rem] lg:pb-[3rem] lg:pt-[6rem]">
+  <TornPanel tone="sage" seed={57} tilt={5} class="mx-auto w-[94%]" bodyClass="grid grid-cols-1 px-[6%] pb-[3rem] lg:grid-cols-[1.2fr_1fr] lg:py-[3.5rem]">
+    <div class="-mt-[4.5rem] mb-[1.5rem] ml-auto w-[42%] max-w-[11rem] rotate-[6deg] lg:absolute lg:-top-[4.5rem] lg:right-[9%] lg:m-0 lg:w-[clamp(10rem,15vw,15rem)] lg:max-w-none">
+      <Illustration name="mandil" blobClass="text-mustard" class="w-full" />
+    </div>
+    <TextBlock
+      kicker={data.kicker}
+      title={data.title}
+      kickerClass="text-bright"
+      titleClass="text-cream"
+      bodyClass="text-cream"
+      cta={data.cta}
+      href={data.href}
+    >
+      <Content />
+    </TextBlock>
+  </TornPanel>
+</section>
