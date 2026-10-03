@@ -1,0 +1,48 @@
+---
+import { site } from "../../config/site";
+import { loadSection } from "../../utils/content";
+import { withBase } from "../../utils/url";
+import Bean from "../ui/Bean.astro";
+import Illustration from "../ui/Illustration.astro";
+import TextBlock from "../ui/TextBlock.astro";
+import TornPanel from "../ui/TornPanel.astro";
+
+const intro = await loadSection("menu-intro");
+const order = await loadSection("menu-pide");
+---
+
+<section class="mx-auto grid w-[90%] grid-cols-1 items-center gap-[3.5rem] pb-[2rem] pt-[3rem] lg:grid-cols-[1fr_1.05fr] lg:gap-[5%] lg:pt-[3.5rem]">
+  <div>
+    <nav aria-label="Ruta" class="flex items-center gap-[0.6rem] font-body text-[1.05rem] font-bold uppercase tracking-wide">
+      <a href={withBase("/")} class="border-b-2 border-sand transition-colors hover:text-caramel">{intro.data.kicker}</a>
+      <Bean class="size-4 text-amber" />
+      <span aria-current="page" class="text-chili">{intro.data.title}</span>
+    </nav>
+    <h1 class="mt-[1rem] font-display text-[clamp(3rem,6vw,6.2rem)] uppercase leading-[1.05] lg:text-[clamp(2.7rem,5.4vw,5.58rem)]">
+      {intro.data.title}
+    </h1>
+    <div class="mt-[1.4rem] max-w-[34rem] font-body text-[clamp(1.1rem,1.4vw,1.55rem)] leading-relaxed lg:text-[clamp(0.99rem,1.26vw,1.395rem)]">
+      <intro.Content />
+    </div>
+  </div>
+
+  <TornPanel
+    tone="bright"
+    seed={5}
+    tilt={-6}
+    bodyClass="grid grid-cols-1 items-center gap-[2rem] px-[7%] py-[2.6rem] sm:grid-cols-[1.4fr_1fr] sm:gap-[4%]"
+  >
+    <TextBlock
+      kicker={order.data.kicker}
+      title={order.data.title}
+      kickerClass="text-terracotta"
+      cta={order.data.cta}
+      href={site.contact.whatsapp}
+      tone="ink"
+      external
+    >
+      <order.Content />
+    </TextBlock>
+    <Illustration name="phone" blobClass="text-teal" class="mx-auto w-[40%] max-w-[12rem] sm:w-full" />
+  </TornPanel>
+</section>

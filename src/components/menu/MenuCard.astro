@@ -1,0 +1,45 @@
+---
+import { Image } from "astro:assets";
+import { formatPrice, menuTags, type MenuTag } from "../../config/menu";
+import { menuPhoto } from "../../utils/menuPhotos";
+
+interface Props {
+  name: string;
+  text: string;
+  price: number;
+  photo: string;
+  tags: MenuTag[];
+}
+
+const { name, text, price, photo, tags } = Astro.props;
+---
+
+<article class="relative bg-paper p-[0.55rem] md:p-[0.9rem]">
+  <div class="pointer-events-none absolute inset-[0.28rem] border-2 border-ink md:inset-[0.45rem]"></div>
+  <Image
+    src={menuPhoto(photo)}
+    alt={name}
+    widths={[320, 480, 640]}
+    sizes="(min-width: 64rem) 22vw, 45vw"
+    class="relative aspect-[4/5] w-full object-cover"
+  />
+  <div class="relative px-[0.2rem] pb-[0.4rem] pt-[0.7rem] md:px-[0.4rem] md:pb-[0.6rem] md:pt-[1rem]">
+    <div class="flex flex-col gap-[0.3rem] md:flex-row md:items-baseline md:gap-[0.5rem]">
+      <h4 class="font-display text-[1.15rem] uppercase leading-[1.05] md:text-[clamp(1.4rem,1.7vw,1.75rem)]">{name}</h4>
+      <span class="hidden min-w-[1rem] flex-1 border-b-2 border-dotted border-ink/40 md:block" aria-hidden="true"></span>
+      <p class="font-display text-[1.3rem] leading-none text-terracotta md:text-[clamp(1.5rem,1.8vw,1.9rem)]">{formatPrice(price)}</p>
+    </div>
+    <p class="mt-[0.5rem] font-body text-[0.85rem] leading-snug text-ink/85 md:text-[1rem] md:leading-relaxed">{text}</p>
+    {
+      tags.length > 0 && (
+        <ul class="mt-[0.6rem] flex flex-wrap gap-[0.4rem]">
+          {tags.map((tag) => (
+            <li class:list={["px-[0.5rem] py-[0.15rem] font-body text-[0.75rem] font-bold uppercase md:text-[0.8rem]", menuTags[tag].class]}>
+              {menuTags[tag].label}
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+</article>

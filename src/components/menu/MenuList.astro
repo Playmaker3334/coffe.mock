@@ -1,0 +1,48 @@
+---
+import { site } from "../../config/site";
+import { formatPrice, menuNote } from "../../config/menu";
+import Tape from "../ui/Tape.astro";
+
+interface Item {
+  name: string;
+  price: number;
+  large?: number;
+}
+
+interface Props {
+  title: string;
+  items: Item[];
+}
+
+const { title, items } = Astro.props;
+const sized = items.some((item) => item.large !== undefined);
+const cell = "w-[3.6rem] shrink-0 text-right font-display text-[1.2rem] leading-none text-terracotta md:text-[1.35rem]";
+---
+
+<div class="relative mx-auto -rotate-[0.3deg] bg-paper px-[2.4rem] py-[3rem] md:px-[5%]">
+  <Tape class="absolute -top-[0.7rem] left-[8%] h-[1.4rem] w-[clamp(5rem,12vw,9rem)] -rotate-[6deg]" />
+  <Tape class="absolute -top-[0.7rem] right-[8%] h-[1.4rem] w-[clamp(5rem,12vw,9rem)] rotate-[5deg]" />
+  <div class="pointer-events-none absolute inset-[1.1rem] border-[3px] border-ink"></div>
+  <div class="pointer-events-none absolute inset-[1.6rem] border border-ink"></div>
+
+  <div class="relative text-center">
+    <p class="font-script text-[clamp(1.6rem,2.4vw,2.1rem)] leading-none text-caramel">{site.name}</p>
+    <h3 class="mt-[0.4rem] font-display text-[clamp(2rem,3.4vw,3.4rem)] uppercase leading-none">{title}</h3>
+    {sized && <p class="mt-[0.6rem] font-body text-[0.85rem] uppercase tracking-[0.3em] text-caramel">Chico · Grande</p>}
+  </div>
+
+  <ul class="relative mt-[2rem] grid grid-cols-1 gap-x-[8%] lg:grid-cols-2">
+    {
+      items.map((item) => (
+        <li class="flex items-baseline gap-[0.6rem] border-b border-dashed border-ink/25 py-[0.75rem]">
+          <span class="font-display text-[clamp(1.1rem,1.6vw,1.6rem)] uppercase leading-[1.1]">{item.name}</span>
+          <span class="min-w-[0.8rem] flex-1 border-b-2 border-dotted border-ink/40" aria-hidden="true" />
+          <span class={cell}>{formatPrice(item.price)}</span>
+          {sized && <span class={cell}>{item.large !== undefined ? formatPrice(item.large) : "—"}</span>}
+        </li>
+      ))
+    }
+  </ul>
+
+  <p class="relative mt-[2rem] text-center font-body text-[0.95rem] italic text-ink/70">* {menuNote}</p>
+</div>

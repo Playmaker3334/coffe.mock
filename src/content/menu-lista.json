@@ -1,0 +1,238 @@
+[
+  {
+    "id": "espresso",
+    "tab": "calientes",
+    "order": 1,
+    "name": "Espresso",
+    "price": 38
+  },
+  {
+    "id": "cortado",
+    "tab": "calientes",
+    "order": 2,
+    "name": "Cortado",
+    "price": 45
+  },
+  {
+    "id": "mocha",
+    "tab": "calientes",
+    "order": 3,
+    "name": "Mocha",
+    "price": 60,
+    "large": 70
+  },
+  {
+    "id": "chocolate",
+    "tab": "calientes",
+    "order": 4,
+    "name": "Chocolate caliente",
+    "price": 50,
+    "large": 60
+  },
+  {
+    "id": "te-negro",
+    "tab": "calientes",
+    "order": 5,
+    "name": "Té negro",
+    "price": 40,
+    "large": 48
+  },
+  {
+    "id": "chai",
+    "tab": "calientes",
+    "order": 6,
+    "name": "Chai latte",
+    "price": 55,
+    "large": 65
+  },
+  {
+    "id": "matcha",
+    "tab": "calientes",
+    "order": 7,
+    "name": "Matcha latte",
+    "price": 62,
+    "large": 72
+  },
+  {
+    "id": "leche-vegetal",
+    "tab": "calientes",
+    "order": 8,
+    "name": "Leche vegetal (extra)",
+    "price": 12,
+    "large": 12
+  },
+  {
+    "id": "cold-brew",
+    "tab": "frios",
+    "order": 1,
+    "name": "Cold brew",
+    "price": 55,
+    "large": 65
+  },
+  {
+    "id": "americano-helado",
+    "tab": "frios",
+    "order": 2,
+    "name": "Americano helado",
+    "price": 45,
+    "large": 55
+  },
+  {
+    "id": "latte-helado",
+    "tab": "frios",
+    "order": 3,
+    "name": "Latte helado",
+    "price": 58,
+    "large": 68
+  },
+  {
+    "id": "chai-helado",
+    "tab": "frios",
+    "order": 4,
+    "name": "Chai helado",
+    "price": 58,
+    "large": 68
+  },
+  {
+    "id": "limonada",
+    "tab": "frios",
+    "order": 5,
+    "name": "Limonada de chaya",
+    "price": 40,
+    "large": 50
+  },
+  {
+    "id": "te-helado",
+    "tab": "frios",
+    "order": 6,
+    "name": "Té de jamaica",
+    "price": 35,
+    "large": 45
+  },
+  {
+    "id": "chilaquiles",
+    "tab": "desayunos",
+    "order": 1,
+    "name": "Chilaquiles rojos o verdes",
+    "price": 95
+  },
+  {
+    "id": "motulenos",
+    "tab": "desayunos",
+    "order": 2,
+    "name": "Huevos motuleños",
+    "price": 110
+  },
+  {
+    "id": "molletes",
+    "tab": "desayunos",
+    "order": 3,
+    "name": "Molletes con pico de gallo",
+    "price": 85
+  },
+  {
+    "id": "hot-cakes",
+    "tab": "desayunos",
+    "order": 4,
+    "name": "Hot cakes con miel",
+    "price": 80
+  },
+  {
+    "id": "avena",
+    "tab": "desayunos",
+    "order": 5,
+    "name": "Avena con fruta de temporada",
+    "price": 70
+  },
+  {
+    "id": "fruta",
+    "tab": "desayunos",
+    "order": 6,
+    "name": "Plato de fruta",
+    "price": 65
+  },
+  {
+    "id": "panuchos",
+    "tab": "comida",
+    "order": 1,
+    "name": "Panuchos de cochinita (3)",
+    "price": 95
+  },
+  {
+    "id": "salbutes",
+    "tab": "comida",
+    "order": 2,
+    "name": "Salbutes de pavo (3)",
+    "price": 95
+  },
+  {
+    "id": "torta-lechon",
+    "tab": "comida",
+    "order": 3,
+    "name": "Torta de lechón",
+    "price": 110
+  },
+  {
+    "id": "panini",
+    "tab": "comida",
+    "order": 4,
+    "name": "Panini de jamón y queso",
+    "price": 105
+  },
+  {
+    "id": "ensalada",
+    "tab": "comida",
+    "order": 5,
+    "name": "Ensalada de la casa",
+    "price": 115
+  },
+  {
+    "id": "sopa-lima",
+    "tab": "comida",
+    "order": 6,
+    "name": "Sopa de lima",
+    "price": 90
+  },
+  {
+    "id": "concha",
+    "tab": "panaderia",
+    "order": 1,
+    "name": "Concha",
+    "price": 28
+  },
+  {
+    "id": "cuernito",
+    "tab": "panaderia",
+    "order": 2,
+    "name": "Cuernito de mantequilla",
+    "price": 32
+  },
+  {
+    "id": "polvoron",
+    "tab": "panaderia",
+    "order": 3,
+    "name": "Polvorón",
+    "price": 22
+  },
+  {
+    "id": "galleta-avena",
+    "tab": "panaderia",
+    "order": 4,
+    "name": "Galleta de avena",
+    "price": 25
+  },
+  {
+    "id": "rol-canela",
+    "tab": "panaderia",
+    "order": 5,
+    "name": "Rol de canela",
+    "price": 38
+  },
+  {
+    "id": "dona",
+    "tab": "panaderia",
+    "order": 6,
+    "name": "Dona glaseada",
+    "price": 30
+  }
+]

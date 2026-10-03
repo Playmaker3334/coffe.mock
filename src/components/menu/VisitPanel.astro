@@ -1,0 +1,24 @@
+---
+import { loadSection } from "../../utils/content";
+import Polaroid from "../ui/Polaroid.astro";
+import TextBlock from "../ui/TextBlock.astro";
+import TornPanel from "../ui/TornPanel.astro";
+
+const { data, Content } = await loadSection("menu-visitanos");
+if (!data.image || !data.alt) throw new Error("menu-visitanos.md necesita image y alt");
+---
+
+<section class="pb-[1.5rem] pt-[4.5rem] lg:pt-[5.5rem]">
+  <TornPanel
+    tone="stone"
+    seed={88}
+    tilt={-6}
+    class="mx-auto w-[94%]"
+    bodyClass="grid grid-cols-1 items-center gap-[3rem] px-[6%] py-[3rem] lg:grid-cols-[1.2fr_1fr] lg:gap-[5%] lg:py-[3.5rem]"
+  >
+    <TextBlock kicker={data.kicker} title={data.title} kickerClass="text-terracotta" cta={data.cta} href={data.href} tone="ink">
+      <Content />
+    </TextBlock>
+    <Polaroid image={data.image} alt={data.alt} caption={data.caption} class="mx-auto w-[80%] max-w-[26rem]" />
+  </TornPanel>
+</section>

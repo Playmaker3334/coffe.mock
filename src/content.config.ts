@@ -3,6 +3,7 @@ import { file, glob } from "astro/loaders";
 import { z } from "astro/zod";
 import { iconNames } from "./components/ui/icons";
 import { illustrationNames } from "./components/ui/illustrations";
+import { menuTabIds, menuTagIds } from "./config/menu";
 
 const destacados = defineCollection({
   loader: file("src/content/destacados.json"),
@@ -55,6 +56,31 @@ const productores = defineCollection({
   }),
 });
 
+const menu = defineCollection({
+  loader: file("src/content/menu.json"),
+  schema: z.object({
+    tab: z.enum(menuTabIds),
+    section: z.string(),
+    order: z.number(),
+    name: z.string(),
+    text: z.string(),
+    price: z.number(),
+    photo: z.string(),
+    tags: z.array(z.enum(menuTagIds)).default([]),
+  }),
+});
+
+const menuLista = defineCollection({
+  loader: file("src/content/menu-lista.json"),
+  schema: z.object({
+    tab: z.enum(menuTabIds),
+    order: z.number(),
+    name: z.string(),
+    price: z.number(),
+    large: z.number().optional(),
+  }),
+});
+
 const secciones = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/secciones" }),
   schema: ({ image }) =>
@@ -69,4 +95,4 @@ const secciones = defineCollection({
     }),
 });
 
-export const collections = { destacados, masPedido, notas, productores, secciones };
+export const collections = { destacados, masPedido, menu, menuLista, notas, productores, secciones };

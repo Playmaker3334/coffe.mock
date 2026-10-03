@@ -1,0 +1,174 @@
+[
+  {
+    "id": "latte-cajeta",
+    "tab": "calientes",
+    "section": "De temporada",
+    "order": 1,
+    "name": "Latte de cajeta",
+    "text": "Espresso, leche y cajeta con un toque de canela.",
+    "price": 75,
+    "photo": "cafe1.jpg",
+    "tags": [
+      "leche"
+    ]
+  },
+  {
+    "id": "capuchino-canela",
+    "tab": "calientes",
+    "section": "De temporada",
+    "order": 2,
+    "name": "Capuchino de canela",
+    "text": "Espuma cremosa y canela recién molida.",
+    "price": 68,
+    "photo": "cafe3.jpg",
+    "tags": [
+      "leche"
+    ]
+  },
+  {
+    "id": "latte-vainilla",
+    "tab": "calientes",
+    "section": "De temporada",
+    "order": 3,
+    "name": "Latte de vainilla",
+    "text": "Vainilla de Papantla, espresso y leche.",
+    "price": 72,
+    "photo": "cafe5.jpg",
+    "tags": [
+      "leche"
+    ]
+  },
+  {
+    "id": "cafe-olla",
+    "tab": "calientes",
+    "section": "De temporada",
+    "order": 4,
+    "name": "Café de olla",
+    "text": "Piloncillo, canela y clavo, servido en barro.",
+    "price": 48,
+    "photo": "cafe4.jpg",
+    "tags": [
+      "vegano"
+    ]
+  },
+  {
+    "id": "americano",
+    "tab": "calientes",
+    "section": "Café",
+    "order": 5,
+    "name": "Americano",
+    "text": "Nuestro tueste de la casa, alargado con agua.",
+    "price": 42,
+    "photo": "cafe2.jpg",
+    "tags": [
+      "vegano"
+    ]
+  },
+  {
+    "id": "capuchino",
+    "tab": "calientes",
+    "section": "Café",
+    "order": 6,
+    "name": "Capuchino",
+    "text": "Espresso, leche y mucha espuma.",
+    "price": 52,
+    "photo": "cafe1.jpg",
+    "tags": [
+      "leche"
+    ]
+  },
+  {
+    "id": "latte",
+    "tab": "calientes",
+    "section": "Café",
+    "order": 7,
+    "name": "Latte",
+    "text": "Espresso con leche cremosa.",
+    "price": 55,
+    "photo": "cafe5.jpg",
+    "tags": [
+      "leche"
+    ]
+  },
+  {
+    "id": "flat-white",
+    "tab": "calientes",
+    "section": "Café",
+    "order": 8,
+    "name": "Flat white",
+    "text": "Doble espresso con poca leche y textura sedosa.",
+    "price": 58,
+    "photo": "cafe3.jpg",
+    "tags": [
+      "leche"
+    ]
+  },
+  {
+    "id": "moca-helado",
+    "tab": "frios",
+    "section": "Frappés y helados",
+    "order": 1,
+    "name": "Moca helado",
+    "text": "Espresso, chocolate, leche fría y crema batida.",
+    "price": 70,
+    "photo": "moca.jpg",
+    "tags": [
+      "leche"
+    ]
+  },
+  {
+    "id": "frappe-capuchino",
+    "tab": "frios",
+    "section": "Frappés y helados",
+    "order": 2,
+    "name": "Frappé capuchino",
+    "text": "Capuchino frappé con crema batida y canela.",
+    "price": 72,
+    "photo": "capuchinnospareja.jpg",
+    "tags": [
+      "leche"
+    ]
+  },
+  {
+    "id": "pay-manzana",
+    "tab": "panaderia",
+    "section": "Pasteles y pays",
+    "order": 1,
+    "name": "Pay de manzana",
+    "text": "Manzana con canela en masa de mantequilla.",
+    "price": 58,
+    "photo": "paydemanzana.jpg",
+    "tags": [
+      "hoy",
+      "gluten"
+    ]
+  },
+  {
+    "id": "pastel-zanahoria",
+    "tab": "panaderia",
+    "section": "Pasteles y pays",
+    "order": 2,
+    "name": "Pastel de zanahoria",
+    "text": "Nuez, especias y betún de queso crema.",
+    "price": 65,
+    "photo": "pastelzanahoria.jpg",
+    "tags": [
+      "nuez",
+      "gluten"
+    ]
+  },
+  {
+    "id": "pastel-cafe",
+    "tab": "panaderia",
+    "section": "Pasteles y pays",
+    "order": 3,
+    "name": "Pastel de café",
+    "text": "Bizcocho de chocolate con crema de espresso.",
+    "price": 68,
+    "photo": "pasteldecafe.jpg",
+    "tags": [
+      "leche",
+      "gluten"
+    ]
+  }
+]

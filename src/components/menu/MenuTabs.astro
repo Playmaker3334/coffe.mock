@@ -1,0 +1,125 @@
+---
+import { getCollection } from "astro:content";
+import { menuTabs } from "../../config/menu";
+import { tornEdge } from "../../utils/paper";
+import Bean from "../ui/Bean.astro";
+import MenuCard from "./MenuCard.astro";
+import MenuList from "./MenuList.astro";
+
+const items = (await getCollection("menu")).map((entry) => entry.data).sort((a, b) => a.order - b.order);
+const list = (await getCollection("menuLista")).map((entry) => entry.data).sort((a, b) => a.order - b.order);
+
+const tabs = menuTabs.map((tab, i) => {
+  const own = items.filter((item) => item.tab === tab.id);
+  const sections = [...new Set(own.map((item) => item.section))].map((title) => ({
+    title,
+    items: own.filter((item) => item.section === title),
+  }));
+  return { ...tab, sections, list: list.filter((item) => item.tab === tab.id), torn: tornEdge(300, 30, 90 + i * 7, 4, "top") };
+});
+---
+
+<section aria-label="Menú por categoría" class="mx-auto mt-[2rem] w-[94%]">
+  <div role="tablist" aria-label="Categorías" class="flex items-end gap-[1%] overflow-x-auto pt-[1.6rem] [scrollbar-width:none]">
+    {
+      tabs.map((tab, i) => (
+        <button
+          type="button"
+          role="tab"
+          id={`tab-${tab.id}`}
+          aria-controls={`panel-${tab.id}`}
+          aria-selected={i === 0 ? "true" : "false"}
+          tabindex={i === 0 ? 0 : -1}
+          data-menu-tab={tab.id}
+          class="group relative min-w-[8.5rem] flex-1 shrink-0"
+        >
+          <svg
+            class:list={["absolute inset-x-0 bottom-[calc(100%-1px)] block aspect-[300/30] w-full", tab.edge]}
+            viewBox="0 0 300 30"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <path d={tab.torn.d} fill="currentColor" />
+          </svg>
+          <span
+            class:list={[
+              "block px-[1rem] pb-[0.7rem] pt-[0.4rem] text-center font-display text-[clamp(1.3rem,1.9vw,2.1rem)] uppercase leading-none transition-[padding] group-aria-selected:pb-[1.1rem] group-aria-selected:pt-[0.7rem]",
+              tab.panel,
+              tab.tabText,
+            ]}
+          >
+            {tab.label}
+          </span>
+        </button>
+      ))
+    }
+  </div>
+
+  {
+    tabs.map((tab, i) => (
+      <div
+        role="tabpanel"
+        id={`panel-${tab.id}`}
+        aria-labelledby={`tab-${tab.id}`}
+        hidden={i !== 0}
+        class:list={[tab.panel, "px-[3%] pb-[3.5rem] pt-[2.5rem] md:px-[4%] md:pb-[4.5rem] md:pt-[3.5rem]"]}
+      >
+        {tab.sections.map((section, si) => (
+          <div class:list={[si > 0 && "mt-[3.5rem] md:mt-[4.5rem]"]}>
+            <h3
+              class:list={[
+                "flex items-center justify-center gap-[0.5rem] text-center font-display text-[clamp(2rem,4.2vw,4.2rem)] uppercase leading-none md:gap-[1rem]",
+                tab.heading,
+              ]}
+            >
+              <Bean class:list={["hidden size-7 shrink-0 md:block", tab.ornament]} />
+              <Bean class="size-5 shrink-0 text-leaf" />
+              {section.title}
+              <Bean class="size-5 shrink-0 text-leaf" />
+              <Bean class:list={["hidden size-7 shrink-0 md:block", tab.ornament]} />
+            </h3>
+            <div class="mt-[2rem] grid grid-cols-2 gap-[0.9rem] md:gap-[1.6rem] lg:mt-[2.5rem] lg:grid-cols-4 lg:gap-[2.2%]">
+              {section.items.map((item) => (
+                <MenuCard name={item.name} text={item.text} price={item.price} photo={item.photo} tags={item.tags} />
+              ))}
+            </div>
+          </div>
+        ))}
+        {tab.list.length > 0 && (
+          <div class:list={[tab.sections.length > 0 && "mt-[3.5rem] md:mt-[4.5rem]"]}>
+            <MenuList title={tab.listTitle} items={tab.list} />
+          </div>
+        )}
+      </div>
+    ))
+  }
+</section>
+
+<script>
+  const tabs = [...document.querySelectorAll<HTMLButtonElement>("[data-menu-tab]")];
+
+  const select = (tab: HTMLButtonElement, focus = false) => {
+    tabs.forEach((other) => {
+      const active = other === tab;
+      other.setAttribute("aria-selected", String(active));
+      other.tabIndex = active ? 0 : -1;
+      const panel = document.getElementById(other.getAttribute("aria-controls") ?? "");
+      if (panel) panel.hidden = !active;
+    });
+    if (focus) tab.focus();
+    history.replaceState(null, "", `#${tab.dataset.menuTab}`);
+  };
+
+  tabs.forEach((tab, i) => {
+    tab.addEventListener("click", () => select(tab));
+    tab.addEventListener("keydown", (event) => {
+      const step = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
+      if (!step) return;
+      event.preventDefault();
+      select(tabs[(i + step + tabs.length) % tabs.length], true);
+    });
+  });
+
+  const initial = tabs.find((tab) => `#${tab.dataset.menuTab}` === window.location.hash);
+  if (initial) select(initial);
+</script>
