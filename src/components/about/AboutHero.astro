@@ -7,7 +7,7 @@ const { data, Content } = await loadSection("nosotros-hero");
 if (!data.image || !data.alt) throw new Error("nosotros-hero.md necesita image y alt");
 ---
 
-<section class="relative flex min-h-[calc(82svh-var(--header-h,5rem))] items-center overflow-hidden bg-ink pb-[7rem] lg:pb-[8rem]">
+<section class="relative flex min-h-[calc(100svh-var(--header-h,5rem))] items-center overflow-hidden bg-ink pb-[7rem] lg:pb-[8rem]">
   <Image
     src={data.image}
     alt={data.alt}
