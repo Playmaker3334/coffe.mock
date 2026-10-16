@@ -1,0 +1,12 @@
+---
+import AdminLayout from "../../layouts/AdminLayout.astro";
+---
+
+<AdminLayout title="Insumos y recetas" module="inventario" kicker="Catálogo">
+  <div data-view></div>
+</AdminLayout>
+
+<script>
+  import { mountInventario } from "../../admin/views/inventario";
+  mountInventario();
+</script>

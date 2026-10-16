@@ -1,0 +1,12 @@
+---
+import AdminLayout from "../../layouts/AdminLayout.astro";
+---
+
+<AdminLayout title="Corte de caja" module="corte" kicker="Cuenta el efectivo">
+  <div data-corte></div>
+</AdminLayout>
+
+<script>
+  import { mountCorte } from "../../admin/views/corte";
+  mountCorte();
+</script>

@@ -1,0 +1,27 @@
+---
+import AdminLayout from "../../layouts/AdminLayout.astro";
+---
+
+<AdminLayout title="Caja" module="caja" kicker="Punto de venta">
+  <div class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_25rem]">
+    <section aria-label="Catálogo" data-catalog></section>
+    <aside id="pedido" aria-label="Pedido actual" class="scroll-mt-20 xl:sticky xl:top-6 xl:self-start">
+      <div class="border-2 border-ink bg-paper shadow-[4px_4px_0_0_var(--color-ink)]">
+        <div data-customer class="border-b-2 border-dashed border-ink/40 p-4"></div>
+        <div data-delivery class="border-b-2 border-dashed border-ink/40 p-4"></div>
+        <div data-lines class="p-4"></div>
+        <div data-totals class="border-t-2 border-ink bg-cream p-4"></div>
+      </div>
+    </aside>
+  </div>
+  <a href="#pedido" data-mobile-bar hidden class="fixed inset-x-0 bottom-0 z-30 flex min-h-14 items-center justify-between gap-3 border-t-2 border-ink bg-sun px-4 font-display text-xl uppercase text-ink xl:hidden">
+    <span>Ver pedido · <span data-mobile-count class="tabular-nums"></span></span>
+    <span data-mobile-total class="tabular-nums"></span>
+  </a>
+  <div class="h-16 xl:hidden" aria-hidden="true"></div>
+</AdminLayout>
+
+<script>
+  import { mountCaja } from "../../admin/views/caja";
+  mountCaja();
+</script>

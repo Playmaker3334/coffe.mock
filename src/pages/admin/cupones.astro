@@ -1,0 +1,12 @@
+---
+import AdminLayout from "../../layouts/AdminLayout.astro";
+---
+
+<AdminLayout title="Cupones" module="cupones" kicker="Cortesías auditadas">
+  <div data-view></div>
+</AdminLayout>
+
+<script>
+  import { mountCupones } from "../../admin/views/cupones";
+  mountCupones();
+</script>

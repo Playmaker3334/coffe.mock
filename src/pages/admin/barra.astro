@@ -1,0 +1,12 @@
+---
+import AdminLayout from "../../layouts/AdminLayout.astro";
+---
+
+<AdminLayout title="Barra" module="barra" kicker="Pedidos en preparación">
+  <div data-barra></div>
+</AdminLayout>
+
+<script>
+  import { mountBarra } from "../../admin/views/barra";
+  mountBarra();
+</script>

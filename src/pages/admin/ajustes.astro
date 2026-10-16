@@ -1,0 +1,12 @@
+---
+import AdminLayout from "../../layouts/AdminLayout.astro";
+---
+
+<AdminLayout title="Ajustes" module="ajustes" kicker="Horarios y caja">
+  <div data-view></div>
+</AdminLayout>
+
+<script>
+  import { mountAjustes } from "../../admin/views/ajustes";
+  mountAjustes();
+</script>

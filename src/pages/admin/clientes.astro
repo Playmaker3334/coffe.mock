@@ -1,0 +1,12 @@
+---
+import AdminLayout from "../../layouts/AdminLayout.astro";
+---
+
+<AdminLayout title="Clientes" module="clientes" kicker="Directorio y monedero">
+  <div data-view></div>
+</AdminLayout>
+
+<script>
+  import { mountClientes } from "../../admin/views/clientes";
+  mountClientes();
+</script>
