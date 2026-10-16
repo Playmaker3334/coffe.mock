@@ -4,7 +4,7 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   site: "https://playmaker3334.github.io",
-  base: "/coffe.mock",
+  base: process.env.BASE_PATH ?? "/coffe.mock",
   vite: {
     plugins: [tailwindcss()],
   },

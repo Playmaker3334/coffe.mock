@@ -1,0 +1,163 @@
+---
+import "@fontsource/anton/400.css";
+import "@fontsource/pacifico/400.css";
+import "@fontsource/josefin-sans/400.css";
+import "@fontsource/josefin-sans/700.css";
+import "../styles/global.css";
+import Bean from "../components/ui/Bean.astro";
+import Icon from "../components/ui/Icon.astro";
+import { NAV, type NavId } from "../admin/nav";
+import { site } from "../config/site";
+import { withBase } from "../utils/url";
+
+interface Props {
+  title: string;
+  module: NavId;
+  kicker?: string;
+}
+
+const { title, module, kicker = "Panel" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="es-MX">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <meta name="robots" content="noindex" />
+    <style is:inline>html{background-color:#fcf6e5}</style>
+    <title>{title} · Panel {site.name}</title>
+    <link rel="icon" type="image/svg+xml" href={withBase("/favicon.svg")} />
+  </head>
+  <body class="min-h-dvh bg-cream font-body text-ink" data-module={module}>
+    <a href="#contenido" class="sr-only z-50 bg-sun px-4 py-2 font-bold focus:not-sr-only focus:fixed focus:left-4 focus:top-4">Saltar al contenido</a>
+
+    <div class="lg:grid lg:min-h-dvh lg:grid-cols-[15.5rem_1fr]">
+      <div class="lg:bg-ink">
+      <aside id="admin-nav" class="bg-ink text-cream max-lg:hidden max-lg:fixed max-lg:inset-0 max-lg:z-50 max-lg:overflow-y-auto max-lg:data-[open]:block lg:sticky lg:top-0 lg:h-dvh lg:overflow-y-auto">
+        <div class="flex items-start justify-between px-6 pb-4 pt-6">
+          <a href={withBase("/admin/caja")} class="flex flex-col leading-none">
+            <span class="pb-1 font-script text-[2.1rem] text-sun">{site.name}</span>
+            <span class="font-bold uppercase tracking-[0.35em] text-[0.7rem] text-cream">Panel · {site.tagline}</span>
+          </a>
+          <button type="button" data-nav-close class="grid size-11 place-items-center lg:hidden" aria-label="Cerrar menú">
+            <Icon name="close" class="size-7 text-chili" />
+          </button>
+        </div>
+
+        <nav aria-label="Panel" class="px-3 pb-6">
+          {NAV.map((g) => (
+            <div data-nav-group class="mt-4">
+              <p class="px-3 pb-1 text-[0.72rem] font-bold uppercase tracking-[0.22em] text-sand">{g.group}</p>
+              <ul>
+                {g.items.map((item) => (
+                  <li data-nav-item={item.id}>
+                    <a
+                      href={withBase(item.href)}
+                      aria-current={item.id === module ? "page" : undefined}
+                      class:list={[
+                        "group flex min-h-11 items-center gap-3 px-3 font-display text-[1.15rem] uppercase tracking-wide transition-colors",
+                        item.id === module ? "bg-sun text-ink" : "hover:bg-cream/10 hover:text-sun",
+                        "focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-sun",
+                      ]}
+                    >
+                      <Bean class:list={["size-4 shrink-0", item.id === module ? "text-roast" : "text-leaf group-hover:text-amber"]} crease={item.id === module ? "var(--color-sun)" : "var(--color-ink)"} />
+                      {item.label}
+                      {item.id === "barra" && <span data-barra-badge hidden class="ml-auto min-w-7 bg-chili px-1.5 py-0.5 text-center font-body text-sm font-bold tabular-nums text-cream" />}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </nav>
+
+        <div class="mx-3 mb-6 border-t border-cream/20 px-3 pt-4">
+          <p class="text-[0.72rem] font-bold uppercase tracking-[0.22em] text-sand">Sesión</p>
+          <p class="mt-1 font-bold"><span data-user-name>—</span> <span data-user-role class="font-normal text-cream/80"></span></p>
+          <div class="mt-3 flex flex-wrap gap-2">
+            <a href={withBase("/admin")} class="inline-flex min-h-11 items-center border-2 border-cream/40 px-3 text-sm font-bold uppercase tracking-wider hover:border-sun hover:text-sun">Cambiar usuario</a>
+            <a href={withBase("/productos")} class="inline-flex min-h-11 items-center px-3 text-sm font-bold uppercase tracking-wider text-sun hover:underline">Ver tienda ↗</a>
+          </div>
+        </div>
+      </aside>
+      </div>
+
+      <div class="min-w-0">
+        <header class="sticky top-0 z-30 flex items-center justify-between bg-ink px-4 py-3 text-cream lg:hidden">
+          <span class="font-script text-[1.6rem] text-sun">{site.name}</span>
+          <button type="button" data-nav-open class="flex min-h-11 items-center gap-2 font-display text-lg uppercase" aria-controls="admin-nav" aria-expanded="false">
+            <Icon name="menu" class="size-7" /> Menú
+          </button>
+        </header>
+
+        <main id="contenido" class="px-4 pb-16 pt-6 sm:px-6 lg:px-10 lg:pt-8">
+          <div class="mb-6 flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p class="font-body text-[0.78rem] font-bold uppercase tracking-[0.2em] text-caramel">{kicker}</p>
+              <h1 class="font-display text-[clamp(2.4rem,4vw,3.6rem)] uppercase leading-[0.95] tracking-wide">{title}</h1>
+            </div>
+            <div data-page-actions class="flex flex-wrap gap-3"><slot name="actions" /></div>
+          </div>
+
+          <section data-denied hidden class="max-w-xl border-2 border-ink bg-paper p-6 shadow-[4px_4px_0_0_var(--color-ink)]">
+            <h2 class="font-display text-2xl uppercase">Sin acceso a este módulo</h2>
+            <p class="mt-2 text-lg">Tu usuario no tiene permiso para ver <b>{title}</b>. Pide a administración que te lo asigne en <i>Usuarios</i>, o entra con otro usuario.</p>
+            <a href={withBase("/admin")} class="mt-4 inline-flex min-h-11 items-center bg-ink px-4 font-display uppercase text-cream hover:bg-roast">Cambiar usuario</a>
+          </section>
+
+          <div data-allowed hidden>
+            <slot />
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script>
+      import { canRead } from "../admin/logic";
+      import { session, store } from "../admin/store";
+      import type { ModuleId } from "../admin/types";
+      import { withBase } from "../utils/url";
+
+      const user = session.user();
+      if (!user) window.location.replace(withBase("/admin"));
+      else {
+        const mod = document.body.dataset.module as ModuleId | "usuarios";
+        const allowed = (id: string) => (id === "usuarios" ? user.isAdmin : canRead(user, id as ModuleId));
+
+        document.querySelectorAll<HTMLElement>("[data-nav-item]").forEach((li) => (li.hidden = !allowed(li.dataset.navItem!)));
+        document.querySelectorAll<HTMLElement>("[data-nav-group]").forEach((g) => (g.hidden = !g.querySelector("[data-nav-item]:not([hidden])")));
+        document.querySelector("[data-user-name]")!.textContent = user.name;
+        document.querySelector("[data-user-role]")!.textContent = `· ${user.isAdmin ? "Administración" : user.role}`;
+
+        const ok = allowed(mod);
+        document.querySelector<HTMLElement>("[data-allowed]")!.hidden = !ok;
+        document.querySelector<HTMLElement>("[data-denied]")!.hidden = ok;
+        document.querySelector<HTMLElement>("[data-page-actions]")!.hidden = !ok;
+
+        const badge = document.querySelector<HTMLElement>("[data-barra-badge]");
+        const paintBadge = () => {
+          const n = store.get().orders.filter((o) => o.status < 3).length;
+          if (!badge) return;
+          badge.hidden = n === 0;
+          badge.textContent = String(n);
+          badge.setAttribute("aria-label", `${n} pedidos activos`);
+        };
+        paintBadge();
+        store.subscribe(paintBadge);
+      }
+
+      const nav = document.getElementById("admin-nav")!;
+      const opener = document.querySelector<HTMLElement>("[data-nav-open]")!;
+      const toggle = (open: boolean) => {
+        nav.toggleAttribute("data-open", open);
+        opener.setAttribute("aria-expanded", String(open));
+        document.documentElement.style.overflow = open ? "hidden" : "";
+      };
+      opener.addEventListener("click", () => toggle(true));
+      document.querySelector("[data-nav-close]")!.addEventListener("click", () => toggle(false));
+      document.addEventListener("keydown", (e) => e.key === "Escape" && nav.hasAttribute("data-open") && toggle(false));
+    </script>
+  </body>
+</html>

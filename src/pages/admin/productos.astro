@@ -1,0 +1,12 @@
+---
+import AdminLayout from "../../layouts/AdminLayout.astro";
+---
+
+<AdminLayout title="Productos" module="productos" kicker="Catálogo">
+  <div data-view></div>
+</AdminLayout>
+
+<script>
+  import { mountProductos } from "../../admin/views/productos";
+  mountProductos();
+</script>

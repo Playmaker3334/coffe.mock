@@ -1,0 +1,106 @@
+---
+import "@fontsource/anton/400.css";
+import "@fontsource/pacifico/400.css";
+import "@fontsource/josefin-sans/400.css";
+import "@fontsource/josefin-sans/700.css";
+import "../../styles/global.css";
+import Bean from "../../components/ui/Bean.astro";
+import Tape from "../../components/ui/Tape.astro";
+import { site } from "../../config/site";
+import { withBase } from "../../utils/url";
+---
+
+<!doctype html>
+<html lang="es-MX">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <style is:inline>html{background-color:#1f2229}</style>
+    <title>Entrar · Panel {site.name}</title>
+    <link rel="icon" type="image/svg+xml" href={withBase("/favicon.svg")} />
+  </head>
+  <body class="min-h-dvh bg-ink font-body text-cream">
+    <main class="mx-auto flex min-h-dvh w-full max-w-5xl flex-col justify-center px-4 py-12 sm:px-6">
+      <div class="flex flex-col items-center text-center">
+        <span class="font-script text-[clamp(3rem,8vw,5rem)] leading-none text-sun">{site.name}</span>
+        <span class="mt-5 font-bold uppercase tracking-[0.4em] text-[0.85rem]">Panel · {site.tagline}</span>
+        <h1 class="mt-8 font-display text-[clamp(2rem,4vw,3rem)] uppercase leading-none tracking-wide">¿Quién entra a turno?</h1>
+        <p class="mt-3 max-w-xl text-lg text-cream/85">
+          Demo sin contraseñas. Cada usuario ve solo los módulos que su rol permite: prueba el corte de caja como <b class="text-sun">Caja</b> y luego como <b class="text-sun">Administración</b>.
+        </p>
+      </div>
+
+      <ul data-users class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4"></ul>
+
+      <div class="mt-12 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-sm">
+        <a href={withBase("/productos")} class="inline-flex min-h-11 items-center font-bold uppercase tracking-wider text-sun hover:underline">Ir a la tienda en línea ↗</a>
+        <button type="button" data-reset class="inline-flex min-h-11 cursor-pointer items-center border-2 border-cream/40 px-4 font-bold uppercase tracking-wider hover:border-chili hover:text-chili">Reiniciar datos del demo</button>
+      </div>
+    </main>
+
+    <template data-card>
+      <li>
+        <button type="button" class="group relative flex h-full w-full cursor-pointer flex-col items-start bg-cream p-5 pt-7 text-left text-ink shadow-[6px_6px_0_0_var(--color-sun)] transition-transform duration-150 hover:-translate-y-1 hover:rotate-[-0.6deg] focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-sun active:translate-y-0">
+          <Tape class="absolute -top-2.5 left-6 h-5 w-20 -rotate-6" />
+          <span data-role class="text-[0.75rem] font-bold uppercase tracking-[0.2em] text-caramel"></span>
+          <span data-name class="mt-1 font-display text-[2.2rem] uppercase leading-none"></span>
+          <span data-mods class="mt-3 text-[0.95rem] leading-snug text-ink/80"></span>
+          <span class="mt-auto inline-flex items-center gap-2 pt-5 font-display text-lg uppercase text-roast group-hover:text-chili">
+            <Bean class="size-4 text-amber" /> Entrar
+          </span>
+        </button>
+      </li>
+    </template>
+
+    <script>
+      import { NAV } from "../../admin/nav";
+      import { canRead } from "../../admin/logic";
+      import { session, store } from "../../admin/store";
+      import type { ModuleId } from "../../admin/types";
+      import { withBase } from "../../utils/url";
+
+      const list = document.querySelector("[data-users]")!;
+      const tpl = document.querySelector<HTMLTemplateElement>("[data-card]")!;
+      const labels = NAV.flatMap((g) => g.items);
+
+      const firstPage = (userId: string) => {
+        const user = store.get().users.find((u) => u.id === userId)!;
+        const item = labels.find((i) => i.id !== "usuarios" && canRead(user, i.id as ModuleId));
+        return withBase(item?.href ?? "/admin/caja");
+      };
+
+      const paint = () => {
+        list.replaceChildren(
+          ...store.get().users.filter((u) => u.active).map((u) => {
+            const li = tpl.content.firstElementChild!.cloneNode(true) as HTMLElement;
+            li.querySelector("[data-role]")!.textContent = u.isAdmin ? "Administración" : u.role;
+            li.querySelector("[data-name]")!.textContent = u.name;
+            const mods = u.isAdmin ? "Acceso total, incluye usuarios y permisos." : labels.filter((i) => i.id !== "usuarios" && canRead(u, i.id as ModuleId)).map((i) => i.label).join(" · ");
+            li.querySelector("[data-mods]")!.textContent = mods;
+            li.querySelector("button")!.addEventListener("click", () => {
+              session.login(u.id);
+              window.location.href = firstPage(u.id);
+            });
+            return li;
+          }),
+        );
+      };
+      paint();
+
+      document.querySelector("[data-reset]")!.addEventListener("click", (e) => {
+        const btn = e.currentTarget as HTMLButtonElement;
+        if (btn.dataset.confirm !== "1") {
+          btn.dataset.confirm = "1";
+          btn.textContent = "Toca otra vez para borrar todo";
+          return;
+        }
+        store.reset();
+        session.logout();
+        btn.dataset.confirm = "";
+        btn.textContent = "Datos reiniciados ✓";
+        paint();
+      });
+    </script>
+  </body>
+</html>

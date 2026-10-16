@@ -1,0 +1,12 @@
+---
+import AdminLayout from "../../layouts/AdminLayout.astro";
+---
+
+<AdminLayout title="Combos" module="promociones" kicker="Catálogo">
+  <div data-view></div>
+</AdminLayout>
+
+<script>
+  import { mountCombos } from "../../admin/views/combos";
+  mountCombos();
+</script>

@@ -96,6 +96,7 @@ const field = "w-full border-2 border-ink bg-paper px-[0.8rem] py-[0.55rem] font
   import { site } from "../../config/site";
   import { delivery } from "../../config/tienda";
   import { cart, type CartState } from "../../utils/cart";
+  import { pushWebOrder } from "../../admin/web-order";
 
   const dialog = document.getElementById("cart-drawer");
 
@@ -189,6 +190,12 @@ const field = "w-full border-2 border-ink bg-paper px-[0.8rem] py-[0.55rem] font
         "",
         `${value("nombre")} · ${value("telefono")}`,
       ];
+
+      const pushed = pushWebOrder({
+        items: state.items, pickup, fee, name: value("nombre"), phone: value("telefono"), time: value("hora"), payment: value("pago"),
+        address: pickup ? "" : [value("direccion"), zoneOf(state).name, value("referencias")].filter(Boolean).join(", "),
+      });
+      if ("id" in pushed) lines.unshift(`Folio #${pushed.id}`);
 
       window.open(`${site.contact.whatsapp}?text=${encodeURIComponent(lines.join("\n"))}`, "_blank", "noopener");
       $("[data-sent]").hidden = false;

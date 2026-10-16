@@ -1,0 +1,12 @@
+---
+import AdminLayout from "../../layouts/AdminLayout.astro";
+---
+
+<AdminLayout title="Ventas" module="ventas" kicker="Historial de pedidos">
+  <div data-ventas></div>
+</AdminLayout>
+
+<script>
+  import { mountVentas } from "../../admin/views/ventas";
+  mountVentas();
+</script>

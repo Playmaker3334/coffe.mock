@@ -1,0 +1,12 @@
+---
+import AdminLayout from "../../layouts/AdminLayout.astro";
+---
+
+<AdminLayout title="Cierre del día" module="cierre" kicker="Resumen de ventas">
+  <div data-cierre></div>
+</AdminLayout>
+
+<script>
+  import { mountCierre } from "../../admin/views/cierre";
+  mountCierre();
+</script>

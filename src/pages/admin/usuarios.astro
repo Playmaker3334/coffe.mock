@@ -1,0 +1,12 @@
+---
+import AdminLayout from "../../layouts/AdminLayout.astro";
+---
+
+<AdminLayout title="Usuarios" module="usuarios" kicker="Roles y permisos">
+  <div data-view></div>
+</AdminLayout>
+
+<script>
+  import { mountUsuarios } from "../../admin/views/usuarios";
+  mountUsuarios();
+</script>
