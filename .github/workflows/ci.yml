@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Construir imagen
+        run: docker build -t cafeteria:ci .
+
+      - name: Prueba de humo
+        run: |
+          docker run -d --name web -p 8080:80 cafeteria:ci
+          for i in $(seq 1 10); do curl -fsS http://localhost:8080/ >/dev/null && break; sleep 1; done
+          for path in / /menu/ /productos/ /nosotros/ /donde-encontrarnos/ /admin/; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "http://localhost:8080$path")
+            echo "$path -> $code"
+            test "$code" = "200"
+          done
+
+      - name: Logs del contenedor
+        if: always()
+        run: docker logs web
+
+  terraform:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: infra
+    steps:
+      - uses: actions/checkout@v7
+      - uses: hashicorp/setup-terraform@v3
+      - run: terraform fmt -check
+      - run: terraform init -backend=false
+      - run: terraform validate
