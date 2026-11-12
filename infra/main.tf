@@ -53,6 +53,12 @@ resource "digitalocean_firewall" "web" {
     source_addresses = ["0.0.0.0/0", "::/0"]
   }
 
+  inbound_rule {
+    protocol         = "tcp"
+    port_range       = "443"
+    source_addresses = ["0.0.0.0/0", "::/0"]
+  }
+
   outbound_rule {
     protocol              = "tcp"
     port_range            = "1-65535"
@@ -73,4 +79,8 @@ resource "digitalocean_firewall" "web" {
 
 output "ip" {
   value = digitalocean_droplet.web.ipv4_address
+}
+
+output "url" {
+  value = "https://${replace(digitalocean_droplet.web.ipv4_address, ".", "-")}.sslip.io"
 }
