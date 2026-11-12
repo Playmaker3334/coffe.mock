@@ -1,0 +1,45 @@
+name: Deploy to Droplet
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: droplet
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      HOST: ${{ secrets.DROPLET_IP }}
+      TAG: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Construir imagen
+        run: docker build -t cafeteria:$TAG .
+
+      - name: Configurar SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DROPLET_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts
+
+      - name: Enviar imagen al Droplet
+        run: docker save cafeteria:$TAG | gzip | ssh root@$HOST 'gunzip | docker load'
+
+      - name: Reemplazar contenedor
+        run: |
+          ssh root@$HOST "
+            docker rm -f cafeteria 2>/dev/null || true
+            docker run -d --name cafeteria --restart unless-stopped -p 80:80 cafeteria:$TAG
+            docker image prune -af
+          "
+
+      - name: Verificar
+        run: |
+          sleep 3
+          curl -fsS -o /dev/null -w '%{http_code}\n' "http://$HOST/"
