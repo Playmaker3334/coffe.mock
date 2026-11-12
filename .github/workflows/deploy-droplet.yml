@@ -18,6 +18,9 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      - name: Calcular dominio
+        run: echo "DOMAIN=$(echo "$HOST" | tr . -).sslip.io" >> "$GITHUB_ENV"
+
       - name: Construir imagen
         run: docker build -t cafeteria:$TAG .
 
@@ -31,15 +34,29 @@ jobs:
       - name: Enviar imagen al Droplet
         run: docker save cafeteria:$TAG | gzip | ssh root@$HOST 'gunzip | docker load'
 
-      - name: Reemplazar contenedor
+      - name: Reemplazar contenedores
         run: |
           ssh root@$HOST "
+            set -e
+            docker network inspect web >/dev/null 2>&1 || docker network create web
             docker rm -f cafeteria 2>/dev/null || true
-            docker run -d --name cafeteria --restart unless-stopped -p 80:80 cafeteria:$TAG
+            docker run -d --name cafeteria --network web --restart unless-stopped cafeteria:$TAG
+            mkdir -p /opt/caddy
+            printf '%s {\n  reverse_proxy cafeteria:80\n}\n' '$DOMAIN' > /opt/caddy/Caddyfile
+            docker rm -f caddy 2>/dev/null || true
+            docker run -d --name caddy --network web --restart unless-stopped \
+              -p 80:80 -p 443:443 \
+              -v /opt/caddy/Caddyfile:/etc/caddy/Caddyfile:ro \
+              -v caddy_data:/data -v caddy_config:/config \
+              caddy:2-alpine
             docker image prune -af
           "
 
-      - name: Verificar
+      - name: Verificar HTTPS
         run: |
-          sleep 3
-          curl -fsS -o /dev/null -w '%{http_code}\n' "http://$HOST/"
+          for i in $(seq 1 30); do
+            curl -fsS -o /dev/null "https://$DOMAIN/" && { echo "OK: https://$DOMAIN"; exit 0; }
+            sleep 2
+          done
+          echo "No respondió https://$DOMAIN"
+          exit 1
